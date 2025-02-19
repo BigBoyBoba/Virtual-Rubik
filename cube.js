@@ -1081,6 +1081,8 @@ class Tween extends Animation {
 
 }
 
+
+
 window.addEventListener('touchmove', () => { });
 document.addEventListener('touchmove', event => { event.preventDefault(); }, { passive: false });
 
@@ -1216,6 +1218,7 @@ const STILL = 0;
 const PREPARING = 1;
 const ROTATING = 2;
 const ANIMATING = 3;
+
 
 class Controls {
 
@@ -1537,7 +1540,7 @@ class Controls {
         this.group.rotation.set(0, 0, 0);
         this.movePieces(layer, this.game.cube.object, this.group);
         this.flipLayer = layer;
-
+        
     }
 
     deselectLayer(layer) {
@@ -1597,78 +1600,35 @@ class Controls {
 
     }
 
-    keyboardMove(type, move, callback) {
+    scrambleCube() {
+            if (this.scramble == null) {
 
-        if (this.state !== STILL) return;
-        if (this.enabled !== true) return;
+                this.scramble = this.game.scrambler;
+                this.scramble.callback = (typeof callback !== 'function') ? () => { } : callback;
+                
+            }
 
-        if (type === 'LAYER') {
-
+            const converted = this.scramble.converted;
+            const move = converted[0];  
             const layer = this.getLayer(move.position);
 
             this.flipAxis = new THREE.Vector3();
             this.flipAxis[move.axis] = 1;
-            this.state = ROTATING;
 
             this.selectLayer(layer);
-            this.rotateLayer(move.angle, false, layer => {
+            this.rotateLayer(move.angle, true, () => {
 
-                this.game.storage.saveGame();
-                this.state = STILL;
-                this.checkIsSolved();
+                converted.shift();
 
-            });
-
-        } else if (type === 'CUBE') {
-
-            this.flipAxis = new THREE.Vector3();
-            this.flipAxis[move.axis] = 1;
-            this.state = ROTATING;
-
-            this.rotateCube(move.angle, () => {
-
-                this.state = STILL;
+                if (converted.length > 0) {
+                    this.scrambleCube();
+                } 
+                else {
+                    this.scramble = null;
+                    this.game.storage.saveGame();
+                }
 
             });
-
-        }
-
-    }
-
-    scrambleCube() {
-
-        if (this.scramble == null) {
-
-            this.scramble = this.game.scrambler;
-            this.scramble.callback = (typeof callback !== 'function') ? () => { } : callback;
-
-        }
-
-        const converted = this.scramble.converted;
-        const move = converted[0];
-        const layer = this.getLayer(move.position);
-
-        this.flipAxis = new THREE.Vector3();
-        this.flipAxis[move.axis] = 1;
-
-        this.selectLayer(layer);
-        this.rotateLayer(move.angle, true, () => {
-
-            converted.shift();
-
-            if (converted.length > 0) {
-
-                this.scrambleCube();
-
-            } else {
-
-                this.scramble = null;
-                this.game.storage.saveGame();
-
-            }
-
-        });
-
     }
 
     getIntersect(position, object, multiple) {
@@ -2268,6 +2228,9 @@ class Game {
                 resetButton: document.querySelector('#resetButton')
             }
         };
+        
+      
+
 
         this.world = new World(this);
         this.cube = new Cube(this);
@@ -2284,7 +2247,6 @@ class Game {
     initGame() {
 
         this.cube.init();
-        this.scrambleAndStart();
         this.controls.enable();
         this.controls.onMove = () => this.startTimer();
         this.controls.onSolved = () => this.complete();
@@ -2296,9 +2258,11 @@ class Game {
     }
 
     scrambleAndStart() {
-        this.scrambler.scramble();
-        this.controls.scrambleCube();
-        this.newGame = true;
+        if(this.controls.scramble == null){
+            this.scrambler.scramble();
+            this.controls.scrambleCube();
+            this.newGame = true;
+        }
     }
 
     startTimer() {
@@ -2313,10 +2277,12 @@ class Game {
     }
 
     resetGame() {
-        this.cube.init();
-        this.timer.reset();
-        this.newGame = true;
-        console.log("Game reset");
+        if(this.controls.scramble == null){
+            this.cube.init();
+            this.timer.reset();
+            this.newGame = true;
+            console.log("Game reset");  
+        }
     }
 }
 
