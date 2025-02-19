@@ -2153,7 +2153,7 @@ class Storage {
     }
 
     defaultPreference() {
-        this.game.cube.size = 2;
+        this.game.cube.size = 3;
         this.game.controls.flipConfig = 1;
         this.game.scrambler.dificulty;
         this.game.world.fov;
@@ -2281,7 +2281,6 @@ class Game {
             this.cube.init();
             this.timer.reset();
             this.newGame = true;
-            console.log("Game reset");  
         }
     }
 }
