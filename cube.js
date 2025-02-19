@@ -1854,26 +1854,27 @@ class Timer extends Animation {
     }
 
     start(continueGame) {
-
+        console.log("start")
         this.startTime = continueGame ? (Date.now() - this.deltaTime) : Date.now();
         this.deltaTime = 0;
         this.converted = this.convert();
-
+        
         super.start();
 
     }
 
     reset() {
-
-        this.startTime = 0;
-        this.currentTime = 0;
+        this.stop();
+        this.startTime = this.currentTime;
         this.deltaTime = 0;
-        this.converted = '0:00';
+        this.converted = '0 :00';
+        this.update();
 
+        console.log("Reset")
     }
 
     stop() {
-
+        console.log("stop")
         this.currentTime = Date.now();
         this.deltaTime = this.currentTime - this.startTime;
         this.convert();
@@ -1890,6 +1891,7 @@ class Timer extends Animation {
 
         this.currentTime = Date.now();
         this.deltaTime = this.currentTime - this.startTime;
+        console.log(this.currentTime, this.startTime);
         this.convert();
 
         if (this.converted != old) {
@@ -1902,12 +1904,10 @@ class Timer extends Animation {
     }
 
     convert() {
-
         const seconds = parseInt((this.deltaTime / 1000) % 60);
         const minutes = parseInt((this.deltaTime / (1000 * 60)));
 
         this.converted = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-
     }
 
     setText() {
