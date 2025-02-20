@@ -1,88 +1,53 @@
 const animationEngine = (() => {
-
     let uniqueID = 0;
 
     class AnimationEngine {
 
         constructor() {
-
-            this.ids = [];
-            this.animations = {};
+            this.animations = new Map();
             this.update = this.update.bind(this);
             this.raf = 0;
-            this.time = 0;
-
+            this.time = performance.now();;
         }
 
         update() {
-
             const now = performance.now();
             const delta = now - this.time;
             this.time = now;
-
-            let i = this.ids.length;
-
-            this.raf = i ? requestAnimationFrame(this.update) : 0;
-
-            while (i--)
-                this.animations[this.ids[i]] && this.animations[this.ids[i]].update(delta);
-
+            this.animations.forEach(anim => anim.update(delta));
+            if (this.animations.size) this.raf = requestAnimationFrame(this.update);
+            else this.raf = 0;
         }
 
         add(animation) {
-
             animation.id = uniqueID++;
-
-            this.ids.push(animation.id);
-            this.animations[animation.id] = animation;
-
-            if (this.raf !== 0) return;
-
-            this.time = performance.now();
-            this.raf = requestAnimationFrame(this.update);
-
+            this.animations.set(animation.id, animation);
+            if (!this.raf) this.raf = requestAnimationFrame(this.update);
         }
 
         remove(animation) {
-
-            const index = this.ids.indexOf(animation.id);
-
-            if (index < 0) return;
-
-            this.ids.splice(index, 1);
-            delete this.animations[animation.id];
-            animation = null;
+            this.animations.delete(animation.id);
 
         }
-
     }
-
     return new AnimationEngine();
-
 })();
 
 class Animation {
 
-    constructor(start) {
-
-        if (start === true) this.start();
-
+    constructor(start = false) {
+        if (start) this.start();
     }
 
     start() {
-
         animationEngine.add(this);
-
     }
 
     stop() {
-
         animationEngine.remove(this);
-
     }
 
-    update(delta) { }
-
+    update(delta) {}
 }
 
 class World extends Animation {
@@ -699,9 +664,7 @@ class Cube {
         this.object.children = [];
         this.object.add(this.game.controls.group);
 
-        if (this.size === 2) this.scale = 1.25;
-        else if (this.size === 3) this.scale = 1;
-        else if (this.size > 3) this.scale = 3 / this.size;
+        this.scale = 3 / this.size;
 
         this.object.scale.set(this.scale, this.scale, this.scale);
 
@@ -730,27 +693,9 @@ class Cube {
 
     }
 
-    resize(force = false) {
-
-        if (this.size !== this.sizeGenerated || force) {
-
-            this.size = this.game.preferences.ranges.size.value;
-
-            this.reset();
-            this.init();
-
-            this.game.saved = false;
-            this.game.timer.reset();
-            this.game.storage.clearGame();
-
-        }
-
-    }
-
     reset() {
 
         this.game.controls.edges.rotation.set(0, 0, 0);
-
         this.holder.rotation.set(0, 0, 0);
         this.object.rotation.set(0, 0, 0);
         this.animator.rotation.set(0, 0, 0);
@@ -2153,7 +2098,7 @@ class Storage {
     }
 
     defaultPreference() {
-        this.game.cube.size = 3;
+        this.game.cube.size = 2;
         this.game.controls.flipConfig = 1;
         this.game.scrambler.dificulty;
         this.game.world.fov;
