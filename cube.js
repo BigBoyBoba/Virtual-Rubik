@@ -1027,7 +1027,6 @@ class Tween extends Animation {
 }
 
 
-
 window.addEventListener('touchmove', () => { });
 document.addEventListener('touchmove', event => { event.preventDefault(); }, { passive: false });
 
@@ -1372,7 +1371,6 @@ class Controls {
 
                 this.rotateLayer(delta, false, layer => {
 
-                    this.game.storage.saveGame();
 
                     this.state = this.gettingDrag ? PREPARING : STILL;
                     this.gettingDrag = false;
@@ -1570,7 +1568,6 @@ class Controls {
                 } 
                 else {
                     this.scramble = null;
-                    this.game.storage.saveGame();
                 }
 
             });
@@ -1790,57 +1787,42 @@ class Scrambler {
 class Timer extends Animation {
 
     constructor(game) {
-
         super(false);
-
         this.game = game;
         this.reset();
 
     }
 
-    start(continueGame) {
-        console.log("start")
-        this.startTime = continueGame ? (Date.now() - this.deltaTime) : Date.now();
+    start() {
+        this.startTime =  Date.now();
         this.deltaTime = 0;
         this.converted = this.convert();
-        
         super.start();
-
     }
 
     reset() {
-        this.stop();
-        this.startTime = this.currentTime;
+        super.stop();
+        this.startTime = Date.now();
         this.deltaTime = 0;
         this.converted = '0 :00';
         this.update();
-
-        console.log("Reset")
     }
 
     stop() {
-        console.log("stop")
         this.currentTime = Date.now();
         this.deltaTime = this.currentTime - this.startTime;
         this.convert();
-
         super.stop();
-
-        return { time: this.converted, millis: this.deltaTime };
-
+        this.setText();
     }
 
     update() {
-
         const old = this.converted;
-
         this.currentTime = Date.now();
         this.deltaTime = this.currentTime - this.startTime;
-        console.log(this.currentTime, this.startTime);
         this.convert();
 
         if (this.converted != old) {
-
             localStorage.setItem('theCube_time', this.deltaTime);
             this.setText();
 
@@ -1851,19 +1833,14 @@ class Timer extends Animation {
     convert() {
         const seconds = parseInt((this.deltaTime / 1000) % 60);
         const minutes = parseInt((this.deltaTime / (1000 * 60)));
-
         this.converted = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
     }
 
     setText() {
-
         this.game.dom.texts.timer.innerHTML = this.converted;
-
     }
 
 }
-
-
 
 class Preferences {
 
@@ -1945,120 +1922,17 @@ class Preferences {
 
 }
 
-
 class Storage {
 
     constructor(game) {
 
         this.game = game;
-
-        const userVersion = localStorage.getItem('theCube_version');
-
-        if (!userVersion || userVersion !== window.gameVersion) {
-
-            this.clearGame();
-            this.clearPreferences();
-            localStorage.setItem('theCube_version', window.gameVersion);
-
-        }
-
     }
 
     init() {
-
         this.defaultPreference();
         this.loadPreferences();
-        this.loadScores();
-
     }
-
-    loadGame() {
-
-        try {
-
-            const gameInProgress = localStorage.getItem('theCube_playing') === 'true';
-
-            if (!gameInProgress) throw new Error();
-
-            const gameCubeData = JSON.parse(localStorage.getItem('theCube_savedState'));
-            const gameTime = parseInt(localStorage.getItem('theCube_time'));
-
-            if (!gameCubeData || gameTime === null) throw new Error();
-            if (gameCubeData.size !== this.game.cube.sizeGenerated) throw new Error();
-
-            this.game.cube.loadFromData(gameCubeData);
-
-            this.game.timer.deltaTime = gameTime;
-
-            this.game.saved = true;
-
-        } catch (e) {
-
-            this.game.saved = false;
-
-        }
-
-    }
-
-    saveGame() {
-
-        const gameInProgress = true;
-        const gameCubeData = { names: [], positions: [], rotations: [] };
-        const gameTime = this.game.timer.deltaTime;
-
-        gameCubeData.size = this.game.cube.sizeGenerated;
-
-        this.game.cube.pieces.forEach(piece => {
-
-            gameCubeData.names.push(piece.name);
-            gameCubeData.positions.push(piece.position);
-            gameCubeData.rotations.push(piece.rotation.toVector3());
-
-        });
-
-        localStorage.setItem('theCube_playing', gameInProgress);
-        localStorage.setItem('theCube_savedState', JSON.stringify(gameCubeData));
-        localStorage.setItem('theCube_time', gameTime);
-
-    }
-
-    clearGame() {
-
-        localStorage.removeItem('theCube_playing');
-        localStorage.removeItem('theCube_savedState');
-        localStorage.removeItem('theCube_time');
-
-    }
-
-    loadScores() {
-
-        try {
-
-            const scoresData = JSON.parse(localStorage.getItem('theCube_scores'));
-
-            if (!scoresData) throw new Error();
-
-            this.game.scores.data = scoresData;
-
-        } catch (e) { }
-
-    }
-
-    saveScores() {
-
-        const scoresData = this.game.scores.data;
-
-        localStorage.setItem('theCube_scores', JSON.stringify(scoresData));
-
-    }
-
-    clearScores() {
-
-        localStorage.removeItem('theCube_scores');
-
-    }
-
-    
 
     loadPreferences() {
 
@@ -2081,7 +1955,6 @@ class Storage {
 
         } catch (e) {
 
-
             this.game.cube.size = 3;
             this.game.controls.flipConfig = 0;
             this.game.scrambler.dificulty = 1;
@@ -2102,30 +1975,19 @@ class Storage {
         this.game.controls.flipConfig = 1;
         this.game.scrambler.dificulty;
         this.game.world.fov;
-        this.game.themes.theme;
         this.game.themes.colors;
         this.savePreferences();
     }
 
     savePreferences() {
-
         const preferences = {
             cubeSize: this.game.cube.size,
             flipConfig: this.game.controls.flipConfig,
             dificulty: this.game.scrambler.dificulty,
             fov: this.game.world.fov,
-            theme: this.game.themes.theme,
             colors: this.game.themes.colors,
         };
-
         localStorage.setItem('theCube_preferences', JSON.stringify(preferences));
-
-    }
-
-    clearPreferences() {
-
-        localStorage.removeItem('theCube_preferences');
-
     }
 
 }
@@ -2133,10 +1995,7 @@ class Storage {
 class Themes {
 
     constructor(game) {
-
         this.game = game;
-        this.theme = null;
-
         this.defaults = {
             U: 0xffffff,
             D: 0xffd500,
@@ -2146,15 +2005,11 @@ class Themes {
             L: 0x009e60,
             P: 0x08101a,
             G: 0x8abdff,
-
         };
-
         this.colors = JSON.parse(JSON.stringify(this.defaults));
-
     }
 
     getColors() {
-
         return this.colors;
 
     }
@@ -2173,9 +2028,6 @@ class Game {
                 resetButton: document.querySelector('#resetButton')
             }
         };
-        
-      
-
 
         this.world = new World(this);
         this.cube = new Cube(this);
@@ -2190,7 +2042,6 @@ class Game {
     }
 
     initGame() {
-
         this.cube.init();
         this.controls.enable();
         this.controls.onMove = () => this.startTimer();
@@ -2204,6 +2055,7 @@ class Game {
 
     scrambleAndStart() {
         if(this.controls.scramble == null){
+            this.timer.reset();
             this.scrambler.scramble();
             this.controls.scrambleCube();
             this.newGame = true;
@@ -2212,7 +2064,7 @@ class Game {
 
     startTimer() {
         if (this.newGame) {
-            this.timer.start(true);
+            this.timer.start();
             this.newGame = false;
         }
     }
@@ -2230,6 +2082,4 @@ class Game {
     }
 }
 
-
-window.gameVersion = '0.0.1';
 window.game = new Game();
