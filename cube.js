@@ -848,7 +848,6 @@ class Cube {
 const Easing = {
 
     Power: {
-
         In: power => {
 
             power = Math.round(power || 1);
@@ -874,21 +873,17 @@ const Easing = {
                 : (1 - Math.abs(Math.pow((t * 2 - 1) - 1, power))) / 2 + 0.5;
 
         },
-
     },
 
     Sine: {
-
         In: () => t => 1 + Math.sin(Math.PI / 2 * t - Math.PI / 2),
 
         Out: () => t => Math.sin(Math.PI / 2 * t),
 
         InOut: () => t => (1 + Math.sin(Math.PI * t - Math.PI / 2)) / 2,
-
     },
 
     Back: {
-
         Out: s => {
 
             s = s || 1.70158;
@@ -904,27 +899,7 @@ const Easing = {
             return t => { return t * t * ((s + 1) * t - s); };
 
         }
-
-    },
-
-    Elastic: {
-
-        Out: (amplitude, period) => {
-
-            let PI2 = Math.PI * 2;
-
-            let p1 = (amplitude >= 1) ? amplitude : 1;
-            let p2 = (period || 0.3) / (amplitude < 1 ? amplitude : 1);
-            let p3 = p2 / PI2 * (Math.asin(1 / p1) || 0);
-
-            p2 = PI2 / p2;
-
-            return t => { return p1 * Math.pow(2, -10 * t) * Math.sin((t - p3) * p2) + 1 }
-
-        },
-
-    },
-
+    }
 };
 
 class Tween extends Animation {
@@ -1691,18 +1666,14 @@ class Controls {
 class Scrambler {
 
     constructor(game) {
-
         this.game = game;
-
         this.dificulty = 0;
-
         this.scrambleLength = {
             2: [7, 9, 11],
             3: [20, 25, 30],
             4: [30, 40, 50],
             5: [40, 60, 80],
         };
-
         this.moves = [];
         this.conveted = [];
         this.pring = '';
@@ -1710,7 +1681,6 @@ class Scrambler {
     }
 
     scramble(scramble) {
-
         let count = 0;
         this.moves = (typeof scramble !== 'undefined') ? scramble.split(' ') : [];
 
@@ -1733,56 +1703,41 @@ class Scrambler {
 
                 this.moves.push(move);
                 count++;
-
             }
-
         }
 
         this.callback = () => { };
         this.convert();
         this.print = this.moves.join(' ');
-
         return this;
 
     }
 
     convert(moves) {
-
         this.converted = [];
-
         this.moves.forEach(move => {
-
             const convertedMove = this.convertMove(move);
             const modifier = move.charAt(1);
-
             this.converted.push(convertedMove);
             if (modifier == "2") this.converted.push(convertedMove);
-
         });
 
     }
 
     convertMove(move) {
-
         const face = move.charAt(0);
         const modifier = move.charAt(1);
-
         const axis = { D: 'y', U: 'y', L: 'x', R: 'x', F: 'z', B: 'z' }[face.toUpperCase()];
         let row = { D: -1, U: 1, L: -1, R: 1, F: 1, B: -1 }[face.toUpperCase()];
-
         if (this.game.cube.size > 3 && face !== face.toLowerCase()) row = row * 2;
-
         const position = new THREE.Vector3();
         position[{ D: 'y', U: 'y', L: 'x', R: 'x', F: 'z', B: 'z' }[face.toUpperCase()]] = row;
-
         const angle = (Math.PI / 2) * - row * ((modifier == "'") ? - 1 : 1);
-
         return { position, axis, angle, name: move };
 
     }
 
 }
-
 
 class Timer extends Animation {
 
@@ -1845,13 +1800,10 @@ class Timer extends Animation {
 class Preferences {
 
     constructor(game) {
-
         this.game = game;
-
     }
 
     init() {
-
         this.ranges = {
 
             size: new Range('size', {
@@ -1907,17 +1859,7 @@ class Preferences {
                 },
                 onComplete: () => this.game.storage.savePreferences()
             })
-
-
-
         };
-
-        this.ranges.scramble.list.forEach((item, i) => {
-
-            item.innerHTML = this.game.scrambler.scrambleLength[this.game.cube.size][i];
-
-        });
-
     }
 
 }
@@ -2019,7 +1961,6 @@ class Game {
     constructor() {
         this.dom = {
             game: document.querySelector('.ui__game'),
-            
             texts: {
                 timer: document.querySelector('.text--timer')
             },
