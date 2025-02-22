@@ -1088,7 +1088,6 @@ class Draggable {
         this.onDragMove = () => { };
         this.onDragEnd = () => { };
 
-        this.enable();
 
         return this;
 
@@ -1103,14 +1102,6 @@ class Draggable {
 
     }
 
-    disable() {
-
-        this.element.removeEventListener('touchstart', this.drag.start, false);
-        this.element.removeEventListener('mousedown', this.drag.start, false);
-
-        return this;
-
-    }
 
     getPositionCurrent(event) {
 
@@ -1180,7 +1171,6 @@ class Controls {
 
         this.scramble = null;
         this.state = STILL;
-        this.enabled = false;
 
         this.initDraggable();
 
@@ -1189,16 +1179,10 @@ class Controls {
     enable() {
 
         this.draggable.enable();
-        this.enabled = true;
 
     }
 
-    disable() {
 
-        this.draggable.disable();
-        this.enabled = false;
-
-    }
 
     initDraggable() {
 
@@ -1960,7 +1944,7 @@ class Themes {
 class Game {
     constructor() {
         this.dom = {
-            game: document.querySelector('.ui__game'),
+            game: document.querySelector('.game'),
             texts: {
                 timer: document.querySelector('.text--timer')
             },
