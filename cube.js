@@ -1678,12 +1678,19 @@ class Timer extends Animation {
         this.converted = '0 :00';
         this.update();
     }
-
+    
     stop() {
         this.currentTime = Date.now();
         this.deltaTime = this.currentTime - this.startTime;
         this.convert();
         super.stop();
+        //Finished
+        const performanceText = document.querySelector("performance__screen");
+        
+        //Add ding sound
+        //Performance screen popup(Best time, personal record etc.)
+        //Add confetti effect???
+        this.converted = "SOLVED";
         this.setText();
     }
 
@@ -1696,7 +1703,6 @@ class Timer extends Animation {
         if (this.converted != old) {
             localStorage.setItem('theCube_time', this.deltaTime);
             this.setText();
-
         }
 
     }
@@ -1904,7 +1910,7 @@ class Game {
         this.controls.onMove = () => this.startTimer();
         this.controls.onSolved = () => this.complete();
     }
-
+asdsa
     initButtons() {
         this.dom.buttons.scrambleButton.addEventListener('click', () => this.scrambleAndStart());
         this.dom.buttons.resetButton.addEventListener('click', () => this.resetGame());

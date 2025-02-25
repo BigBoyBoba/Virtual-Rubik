@@ -25,7 +25,7 @@ body {
 
 .ui__texts  img {
     position: absolute;
-    right: 0px;
+    right: 25vh;
     top: 0px;
     height: 20vh;
     width: auto;
@@ -35,10 +35,44 @@ body {
     font-family: 'Seven Segment', sans-serif;
     position: absolute;
     top: 10vh;
-    right: 2vh;
+    right: 27vh;
     transform: translate(-50%, -50%);
-    font-size: 70px;
+    font-size: 7.5vh;
     font-weight: bold;
+}
+
+.performance__screen{
+    position: absolute;
+    top: 20vh;
+    right: 10vh;
+    height: 50vh;
+    width: 60vh;
+    background-color: #1a1a1a;
+}
+.bbox{
+    position: absolute;
+    height: 8vh;
+    width: 60vh;
+    background-color: #606060; 
+}
+.performance--text{
+    font-family: 'Seven Segment', sans-serif;
+    position: absolute;
+    left: 11vh;
+    top: 1.5vh;
+    font-size: 5vh;
+    font-weight: bold;
+    color: white;
+}
+
+.performance--info pre{
+    font-family: 'Seven Segment', sans-serif;
+    position: absolute;
+    left: 1vh;
+    top: 5vh;
+    font-size: 5vh;
+    font-weight: bold;
+    color: white;
 }
 
 .game {
