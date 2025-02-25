@@ -1,6 +1,6 @@
-//Cube Tween Draggable Control
+//can't rotate in the right side
+//timer broke
 
-// timer problem at start or after solved
 
 
 const animationEngine = (() => {
@@ -52,7 +52,7 @@ class Animation {
         animationEngine.remove(this);
     }
 
-    update(delta) {}
+    update(delta) { }
 }
 
 class World extends Animation {
@@ -85,10 +85,10 @@ class World extends Animation {
         const aspect = this.stage.width / this.stage.height;
         const fovRad = this.fov * THREE.Math.DEG2RAD;
 
-        let distance = (aspect < this.camera.aspect)?
+        let distance = (aspect < this.camera.aspect) ?
             (this.stage.height / 2) / Math.tan(fovRad / 2) :
             (this.stage.width / this.camera.aspect) / (2 * Math.tan(fovRad / 2))
-        ;
+            ;
         distance *= 0.5;
         this.camera.position.set(distance, distance, distance);
         this.camera.lookAt(this.scene.position);
@@ -658,33 +658,16 @@ class Cube {
 
 
     generatePositions() {
-
         const m = this.size - 1;
-        const first = this.size % 2 !== 0
-            ? 0 - Math.floor(this.size / 2)
-            : 0.5 - this.size / 2;
-
+        const first = this.size % 2 ? -Math.floor(this.size / 2) : 0.5 - this.size / 2;
         let x, y, z;
-
         this.positions = [];
-
         for (x = 0; x < this.size; x++) {
             for (y = 0; y < this.size; y++) {
                 for (z = 0; z < this.size; z++) {
-
-                    let position = new THREE.Vector3(first + x, first + y, first + z);
-                    let edges = [];
-
-                    if (x == 0) edges.push(0);
-                    if (x == m) edges.push(1);
-                    if (y == 0) edges.push(2);
-                    if (y == m) edges.push(3);
-                    if (z == 0) edges.push(4);
-                    if (z == m) edges.push(5);
-
-                    position.edges = edges;
-                    this.positions.push(position);
-
+                    const pos = new THREE.Vector3(first + x, first + y, first + z);
+                    pos.edges = [x, y, z].map((v, i) => (v === 0 ? i * 2 : v === m ? i * 2 + 1 : null)).filter(e => e !== null);
+                    this.positions.push(pos);
                 }
             }
         }
@@ -692,14 +675,10 @@ class Cube {
     }
 
     generateModel() {
-
         this.pieces = [];
         this.edges = [];
-
         const pieceSize = 1 / 3;
-
         const mainMaterial = new THREE.MeshLambertMaterial();
-
         const pieceMesh = new THREE.Mesh(
             new RoundedBoxGeometry(pieceSize, this.geometry.pieceCornerRadius, 3),
             mainMaterial.clone()
@@ -712,7 +691,6 @@ class Cube {
         );
 
         this.positions.forEach((position, index) => {
-
             const piece = new THREE.Object3D();
             const pieceCube = pieceMesh.clone();
             const pieceEdges = [];
@@ -722,21 +700,20 @@ class Cube {
             piece.name = index;
             piece.edgesName = '';
 
-            position.edges.forEach(position => {
-
+            position.edges.forEach(edgeIndex => {
                 const edge = new THREE.Mesh(edgeGeometry, mainMaterial.clone());
-                const name = ['L', 'R', 'D', 'U', 'B', 'F'][position];
+                const name = ['L', 'R', 'D', 'U', 'B', 'F'][edgeIndex];
                 const distance = pieceSize / 2;
 
                 edge.position.set(
-                    distance * [- 1, 1, 0, 0, 0, 0][position],
-                    distance * [0, 0, - 1, 1, 0, 0][position],
-                    distance * [0, 0, 0, 0, - 1, 1][position]
+                    distance * [- 1, 1, 0, 0, 0, 0][edgeIndex],
+                    distance * [0, 0, - 1, 1, 0, 0][edgeIndex],
+                    distance * [0, 0, 0, 0, - 1, 1][edgeIndex]
                 );
 
                 edge.rotation.set(
-                    Math.PI / 2 * [0, 0, 1, - 1, 0, 0][position],
-                    Math.PI / 2 * [- 1, 1, 0, 0, 2, 0][position],
+                    Math.PI / 2 * [0, 0, 1, - 1, 0, 0][edgeIndex],
+                    Math.PI / 2 * [- 1, 1, 0, 0, 2, 0][edgeIndex],
                     0
                 );
 
@@ -1110,9 +1087,7 @@ class Controls {
     }
 
     enable() {
-
         this.draggable.enable();
-
     }
 
 
@@ -1375,7 +1350,7 @@ class Controls {
         this.group.rotation.set(0, 0, 0);
         this.movePieces(layer, this.game.cube.object, this.group);
         this.flipLayer = layer;
-        
+
     }
 
     deselectLayer(layer) {
@@ -1436,48 +1411,37 @@ class Controls {
     }
 
     scrambleCube() {
-            if (this.scramble == null) {
-
-                this.scramble = this.game.scrambler;
-                this.scramble.callback = (typeof callback !== 'function') ? () => { } : callback;
-                
+        if (this.scramble == null) {
+            this.scramble = this.game.scrambler;
+            this.scramble.callback = (typeof callback !== 'function') ? () => { } : callback;
+        }
+        const converted = this.scramble.converted;
+        const move = converted[0];
+        const layer = this.getLayer(move.position);
+        this.flipAxis = new THREE.Vector3();
+        this.flipAxis[move.axis] = 1;
+        this.selectLayer(layer);
+        this.rotateLayer(move.angle, true, () => {
+            converted.shift();
+            if (converted.length > 0) {
+                this.scrambleCube();
             }
-
-            const converted = this.scramble.converted;
-            const move = converted[0];  
-            const layer = this.getLayer(move.position);
-
-            this.flipAxis = new THREE.Vector3();
-            this.flipAxis[move.axis] = 1;
-
-            this.selectLayer(layer);
-            this.rotateLayer(move.angle, true, () => {
-
-                converted.shift();
-
-                if (converted.length > 0) {
-                    this.scrambleCube();
-                } 
-                else {
-                    this.scramble = null;
-                }
-
-            });
+            else {
+                this.scramble = null;
+            }
+        });
     }
 
     getIntersect(position, object, multiple) {
-
         this.raycaster.setFromCamera(
             this.draggable.convertPosition(position.clone()),
             this.game.world.camera
         );
-
         const intersect = (multiple)
             ? this.raycaster.intersectObjects(object)
             : this.raycaster.intersectObject(object);
 
         return (intersect.length > 0) ? intersect[0] : false;
-
     }
 
     getMainAxis(vector) {
@@ -1550,8 +1514,6 @@ class Controls {
 
     checkIsSolved() {
 
-        const start = performance.now();
-
         let solved = true;
         const sides = { 'x-': [], 'x+': [], 'y-': [], 'y+': [], 'z-': [], 'z+': [] };
 
@@ -1598,7 +1560,7 @@ class Scrambler {
 
     scramble() {
         let count = 0;
-        this.moves =  [];
+        this.moves = [];
 
         if (this.moves.length < 1) {
 
@@ -1606,7 +1568,7 @@ class Scrambler {
 
             const faces = this.game.cube.size < 4 ? 'UDLRFB' : 'UuDdLlRrFfBb';
             const modifiers = ["", "'", "2"];
-            const total =  scrambleLength ;
+            const total = scrambleLength;
 
             while (count < total) {
 
@@ -1655,6 +1617,7 @@ class Scrambler {
 
 }
 
+
 class Timer extends Animation {
 
     constructor(game) {
@@ -1665,7 +1628,7 @@ class Timer extends Animation {
     }
 
     start() {
-        this.startTime =  Date.now();
+        this.startTime = Date.now();
         this.deltaTime = 0;
         this.converted = '0 :00';
         super.start();
@@ -1678,7 +1641,7 @@ class Timer extends Animation {
         this.converted = '0 :00';
         this.update();
     }
-    
+
     stop() {
         this.currentTime = Date.now();
         this.deltaTime = this.currentTime - this.startTime;
@@ -1686,7 +1649,7 @@ class Timer extends Animation {
         super.stop();
         //Finished
         const performanceText = document.querySelector("performance__screen");
-        
+
         //Add ding sound
         //Performance screen popup(Best time, personal record etc.)
         //Add confetti effect???
@@ -1724,7 +1687,7 @@ class Preferences {
     constructor(game) {
         this.game = game;
     }
-    
+
     init() {
         this.ranges = {
 
@@ -1910,14 +1873,14 @@ class Game {
         this.controls.onMove = () => this.startTimer();
         this.controls.onSolved = () => this.complete();
     }
-asdsa
+    asdsa
     initButtons() {
         this.dom.buttons.scrambleButton.addEventListener('click', () => this.scrambleAndStart());
         this.dom.buttons.resetButton.addEventListener('click', () => this.resetGame());
     }
 
     scrambleAndStart() {
-        if(this.controls.scramble == null){
+        if (this.controls.scramble == null) {
             this.timer.reset();
             this.scrambler.scramble();
             this.controls.scrambleCube();
@@ -1937,7 +1900,7 @@ asdsa
     }
 
     resetGame() {
-        if(this.controls.scramble == null){
+        if (this.controls.scramble == null) {
             this.cube.init();
             this.timer.reset();
             this.newGame = true;
