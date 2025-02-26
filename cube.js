@@ -1,8 +1,3 @@
-//can't rotate in the right side
-//timer broke
-
-
-
 const animationEngine = (() => {
     let uniqueID = 0;
 
