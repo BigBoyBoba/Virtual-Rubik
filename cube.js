@@ -1925,6 +1925,11 @@ class Game {
 
     scrambleAndStart() {
         if (this.controls.scramble == null) {
+            gsap.to(".performance__screen", {
+                scaleX: 0,
+                scaleY: 1.25,
+                duration: 0.5,
+            }); 
             this.timer.reset();
             this.scrambler.scramble();
             this.controls.scrambleCube();
