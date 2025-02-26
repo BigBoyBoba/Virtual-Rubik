@@ -1668,6 +1668,11 @@ class Timer extends Animation {
         this.startTime =  Date.now();
         this.deltaTime = 0;
         this.converted = '0 :00';
+        gsap.to(".performance__screen",{
+            scaleX: 0,
+            scaleY:1.25,
+            duration: 0.5,
+        });
         super.start();
     }
 
@@ -1686,7 +1691,11 @@ class Timer extends Animation {
         super.stop();
         //Finished
         const performanceText = document.querySelector("performance__screen");
-        
+        gsap.to(".performance__screen",{
+            scaleX: 1,
+            scaleY:1,
+            duration: 0.5,
+        });
         //Add ding sound
         //Performance screen popup(Best time, personal record etc.)
         //Add confetti effect???
@@ -1902,7 +1911,10 @@ class Game {
         this.storage.init()
         this.initGame();
         this.initButtons();
+        this.initVisual();
     }
+
+    
 
     initGame() {
         this.cube.init();
@@ -1910,7 +1922,43 @@ class Game {
         this.controls.onMove = () => this.startTimer();
         this.controls.onSolved = () => this.complete();
     }
-asdsa
+
+    initVisual(){
+        setTimeout(() => {
+            gsap.to(".blockinglogo",{
+                scaleY:0,
+                scaleX:2,
+                duration:0.2
+            })
+        }, 1000);
+        
+        setTimeout(()=>{
+            gsap.to(".blockinglogo",{
+                left:"200%",
+                duration: 0,
+            })
+            gsap.to(".performance__screen",{
+                scaleX: 0,
+                scaleY:1.25,
+                duration: 0,
+            });
+            gsap.to(".blockingscreen",{
+                right:"100%",
+                duration: 0.5,
+                ease: "power2.out"
+
+            });
+            gsap.to(".blockingscreen2",{    
+                left:"100%",
+                duration: 0.5,
+                ease: "power2.out"
+
+            });  
+            
+        },1500)
+           
+    }
+
     initButtons() {
         this.dom.buttons.scrambleButton.addEventListener('click', () => this.scrambleAndStart());
         this.dom.buttons.resetButton.addEventListener('click', () => this.resetGame());

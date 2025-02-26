@@ -1,3 +1,7 @@
+element {
+	overflow-x: hidden;
+}
+
 body {
     background-color: #1a1a1a;
     font-size: 32px;
@@ -25,7 +29,7 @@ body {
 
 .ui__texts  img {
     position: absolute;
-    right: 25vh;
+    right: 0px;
     top: 0px;
     height: 20vh;
     width: auto;
@@ -35,7 +39,7 @@ body {
     font-family: 'Seven Segment', sans-serif;
     position: absolute;
     top: 10vh;
-    right: 27vh;
+    right: 2vh;
     transform: translate(-50%, -50%);
     font-size: 7.5vh;
     font-weight: bold;
@@ -43,8 +47,8 @@ body {
 
 .performance__screen{
     position: absolute;
-    top: 20vh;
-    right: 10vh;
+    top: 17.5vh;
+    left: 10vh;
     height: 50vh;
     width: 60vh;
     background-color: #1a1a1a;
@@ -73,6 +77,47 @@ body {
     font-size: 5vh;
     font-weight: bold;
     color: white;
+}
+
+.blockinglogo{
+    position: absolute;
+    z-index: 3;
+    right: 50%; 
+    top: 50%;
+}
+
+.blockinglogo img{
+    position: absolute;
+    z-index: 3;
+
+    align-items: center;
+    height: 50vh;
+    width: auto; 
+    transform: translate(-50%,-50%);   
+}
+
+.blockingscreen{
+    position: absolute;
+    z-index: 2;
+    height: 100%;
+    width: 50%;
+    background-color: #000000; 
+}
+
+.blockingScreendetails{
+    position: absolute;
+    z-index: 2;
+    height: 100%;
+    width: 1%;
+    background-color: #3e3e3e; 
+}
+.blockingscreen2{
+    position: absolute;
+    z-index: 2;
+    left:50%;
+    height: 100%;
+    width: 50%;
+    background-color: #000000; 
 }
 
 .game {
