@@ -1,207 +1,564 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Menu</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: black;
-            color: white;
-            display: flex;
-            height: 100vh;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Menu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: rgb(0, 0, 0);
+      color: rgb(255, 255, 255);
+      display: flex;
+    }
+    
+    .menu {
+      width: 30%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      padding: 20px;
+      position: relative;
+      height: 100vh;
+      margin-left: 10px;
+    }
+    
+    .menu .logo img {
+      position: Auto;
+      width: 80%;
+    }
+    
+    .menu .left-buttons {
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+      margin-left: 0px;
+    }
+    
+    .menu .left-buttons button {
+      font-size: 30px;
+      font-weight: 700;
+      padding: 15px;
+      background: none;
+      border: 2px solid transparent;
+      color: white;
+      cursor: pointer;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      border-radius: 5px;
+      left: 0px;
+    }
+    
+    .menu .left-buttons button:hover {
+      background: lightgray;
+      color: black;
+      border-color: #333;
+    }
+    
+    .menu .bottom-buttons {
+      position: absolute;
+      bottom: 30px;
+      left: 20px;
+      display: flex;
+      gap: 15px;
 
-        .menu {
-            width: 25%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start;
-            padding: 10px;
-            position: relative;
-            height: 100vh; 
-        }
+    }
+    
+    .menu .bottom-buttons button {
+      padding: 20px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 24px;
+      transition: transform 0.2s, background-color 0.2s ease-in-out;
+      border-radius: 5px;
+    }
+    
+    .menu .bottom-buttons button:hover {
+      transform: scale(1.1);
+      background-color: lightgray;
+      color: black;
+    }
+    
+    .right-buttons {
+      position: fixed;
+      top: 50%;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transform: translateY(-50%);
+    }
+    
+    .right-buttons button {
+      padding: 20px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 24px;
+      transition: transform 0.2s, background-color 0.2s ease-in-out;
+      border-radius: 5px;
+    }
+    
+    .right-buttons button:hover {
+      transform: scale(1.1);
+      background-color: lightgray;
+      color: black;
+    }
+    
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      background: #2a2a2a;
+      color: white;
+      border-radius: 5px;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      text-align: center;
+    }
+    .popuptutorial {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 500px; 
+        background: #2a2a2a;
+        color: white;
+        border-radius: 5px;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+        padding: 20px;
+        text-align: left;
+        overflow-y: auto;
+    }
+    .popupcolor {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 500px;
+        background: #2a2a2a;
+        color: white;
+        border-radius: 5px;
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+        padding: 20px;
+        text-align: left;   
+    }
+    .popup ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .popup li {
+      padding: 10px;
+      border-bottom: 1px solid #444;
+      cursor: pointer;
+    }
+    
+    .popup li:hover {
+      background: #505050;
+    }
+    
+    .blank-screen {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+    
+    .exit-button {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: none;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      cursor: pointer;
+      font-size: 24px;
+      transition: transform 0.3s;
+      border-radius: 5px;
+    }
+    
+    .exit-button:hover {
+      transform: scale(1.1);
+      background-color: lightgray;
+      color: black;
+    }
+    
+    .setting-button {
+      background: none;
+      color: white;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 24px;
+      transition: transform 0.5s, rotate 0.3s ease;
+      border-radius: 5px;
+    }
+    
+    .setting-button:hover {
+      transform: scale(1.1) rotate(180deg);
+      background-color: lightgray;
+      color: black;
+    }
+    
+    .language-buttons {
+      position: fixed;
+      bottom: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      width: 100%;
+    }
+    
+    .language-buttons button {
+      background-color: transparent;
+      color: white;
+      border: 2px solid transparent;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    .language-buttons button:hover {
+      background-color: lightgray;
+      color: black;
+      border-color: #333;
+    }
+    
+    .language-buttons img {
+      margin-left: 5px;
+    }
+    
+    .timer {
+      display: none;
+      font-size: 40px;
+      font-weight: bold;
+      color: white;
+      margin-top: 20px;
+    }
+    
+    .stats {
+      display: flex;
+      flex-direction: column;
+      font-size: 18px;
+      margin-left: 20px;
+      text-align: left;
+    }
+    
+    .stats .stat {
+      margin-bottom: 10px;
+    }
+    
+    .stats .stat span {
+      font-weight: 700;
+    }
+    body.logo {
+      padding: 1px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0px;
+      transition: transform 0.2s, background-color 0.2s ease-in-out;
+      border-radius: 70px;
+      margin-bottom: 7px;
+      margin-left: 80px;
+    }
+    .video-container {
+      position: absolute; 
+      top: 50px; 
+      left: 500px;
+      width: 50%; 
+    }
+    .video-container video {
+      width: 100%;
+      height: auto;
+    }
 
-        .menu .logo img {
-            width: 100%;
-            height: auto;
-        }
-
-        .menu .left-buttons {
-            position: abslute;
-            display: flex;
-            flex-direction: column;
-            margin-top: 10px;
-            margin-left: 16px;
-            
-        }
-        .menu .left-buttons button {
-            font-size: 30px; 
-        }
-
-       .menu .bottom-buttons {
-            position: absolute;
-            bottom: 10px;
-            width: 100%;
-            display: flex;
-            justify-content: center; 
-            gap: 10px; 
-        }
-
-        .menu button {
-            padding: 20px ;
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            font-size: 24px;
-            align-self: flex-start;
-            transition: transform .2s; 
-        }
-        
-        .menu button:hover {
-            transform: scale(1.5);
-        }
-
-        .popup { 
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 200px;
-            background: #2a2a2a;
-            color: white;
-            border-radius: 5px;
-            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            text-align: center;
-
-        }
-
-        .popup ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .popup li {
-            padding: 10px;
-            border-bottom: 1px solid #444;
-            cursor: pointer;
-        }
-
-        .popup li:hover {
-            background: #505050;
-        }
-
-        .content {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-        }
-        
-        .content img {
-            width: auto;
-            height:100% ;
-        }
-
-        .blank-screen {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: black;
-            justify-content: flex-start;
-            align-items: flex-start;
-        }
-
-        .exit-button {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: none;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            cursor: pointer;
-            font-size: 24px;
-        }
-
-    </style>
+  </style>
 </head>
-
 <body>
-    <div class="menu">
-        <div class="logo">
-            <img src="/Asset/logo.png" alt="LOGO">
-        </div>
+  <div class="video-container">
+    <video controls>
+        <source src="Background.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+  <div class="menu">
+    <div class="logo">
+      <img src="/Main-menu-page/Asset/LOGO.png" alt="LOGO" />
+    </div>
+    <div class="left-buttons">
+      <h1>PLAY</h1>
+      <button onclick="startGame('2x2')">2x2</button>
+      <button onclick="startGame('3x3')">3x3</button>
+    </div>
+    <div class="bottom-buttons">
+      <button onclick="toggleStartMenu('Credit')">Credit</button>
+      <button onclick="toggleStartMenu('Stats')">Stat</button>
+      <button onclick="toggleStartMenu('Tutorial')">Tutorial</button>
+      <button onclick="toggleStartMenu('popupcolor')">Rubrik's Color</button>
+      <button onclick="toggleStartMenu('Settings')">Settings</button>
+    </div>
+  </div>
+  
+  <div class="blank-screen" id="blankScreen">
+    <button class="exit-button" onclick="exitGame()">EXIT</button>
+  </div>
+
+  <div class="popup" id="Settings">
+    <ul>
+       <li>
+            Language
+            <select id="languageSelect" onchange="updateLanguage()">
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+              <option value="fr">japanese</option>
+              <option value="fr">Thai</option>
+              <option value="fr">Chinese</option>
+              <option value="fr">Russia</option>
+              <option value="fr">German</option>
+              <option value="fr">Portuguese</option>
+            </select>
+      </li>
+      <li>
+        Volume (Sound)
+        <input type="range" min="0" max="100" value="50" class="slider" id="volumeSlider" />
+      </li>
+      <li>
+        Rubrik Size
+        <input type="range" min="0" max="100" value="50" class="slider" id="RubrikSlider" />
+      <li>
+        Resolution
+        <input type="range" min="0" max="100" value="50" class="slider" id="resolutionSlider" />
+      </li>
+      <li>
+        Brightness
+        <input type="range" min="0" max="100" value="50" class="slider" id="brightnessSlider" />
+      </li>
+      <li>
+        Rotation Speed
+        <input type="range" min="0" max="100" value="50" class="slider" id="rotationSpeedSlider" />
+      </li>
+        <li>
+            Theme
+            <input type="color" id="themeColor" name="themeColor" value="#ffffff" onchange="updateThemeColor()">
+        </li>        
+      <li>
+        <button onclick="resetSettings()">Reset</button>
+      </li>
+    </ul>
+    <button onclick="hideScreen('popup')">Back</button>
+  </div>
+  
+  <!-- Rubrik's Color Settings -->
+  <div class="popup" id="popupcolor">
+    <h1>Rubrik's Color</h1>
+    <ul>
+      <li>
+        <label for="frontColor">Front Side</label>
+        <input type="color" id="frontColor" onchange="updateColor('front')">
+      </li>
+      <li>
+        <label for="backColor">Back Side</label>
+        <input type="color" id="backColor" onchange="updateColor('back')">
+      </li>
+      <li>
+        <label for="leftColor">Left Side</label>
+        <input type="color" id="leftColor" onchange="updateColor('left')">
+      </li>
+      <li>
+        <label for="rightColor">Right Side</label>
+        <input type="color" id="rightColor" onchange="updateColor('right')">
+      </li>
+      <li>
+        <label for="topColor">Top Side</label>
+        <input type="color" id="topColor" onchange="updateColor('top')">
+      </li>
+      <li>
+        <label for="bottomColor">Bottom Side</label>
+        <input type="color" id="bottomColor" onchange="updateColor('bottom')">
+      </li>
+    </ul>
+    <button onclick="hideScreen('popupcolor')">Back</button>
+  </div>
+  
+  <div class="popup" id="Credit">
+    <h1>ID: 10 = Nine</h1>
+    <h2>ID: 15 = Dew</h2>
+    <h3>ID: 16 = Faris</h3>
+    <h4>ID: 18 = Bike</h4>
+    <h4>ID: 34 = Hearth</h4>
+
+
+    <button onclick="hideScreen('Credit')">Back</button>
+  </div>
+
+  <div class="popup" id="Stats">
+    <div class="stats">
+      <div class="stat">
+        <span>Total Solves:</span> <span id="totalSolves">0</span>
+      </div>
+      <div class="stat">
+        <span>Best Time:</span> <span id="bestTime">--:--</span>
+      </div>
+      <div class="stat">
+        <span>Average Time:</span> <span id="averageTime">--:--</span>
+      </div>
+    </div>
+    <button onclick="hideScreen('Stats')">Back</button>
+    
+  </div>
+
+  <div class="popuptutorial" id="Tutorial">
+    <h1>How to Play:</h1>
+    <p><strong>Select Your Mode:</strong><br />
+      Choose 2x2 for a simpler puzzle or 3x3 for a more challenging experience by clicking the respective button.
+    </p>
+    <p><strong>Controls & Movement:</strong><br />
+      Mouse/Touch: Click and drag a face of the cube to rotate it.<br />
+      Keyboard (if supported): Use arrow keys or designated keys to rotate specific layers.
+    </p>
+    <p><strong>Timing & Moves:</strong><br />
+      When you start the game, a timer begins. Try to solve the cube as quickly as possible.<br />
+      Your moves are tracked, so aim to use the fewest moves to achieve a high score.
+    </p>
+    <p><strong>Using Menus:</strong><br />
+      Settings: Adjust volume, language, resolution, brightness, and rotation speed by clicking the Settings button (located on the right).<br />
+      Credits & Stats: Access information about the developers and view your gameplay statistics (total solves, best time, average time).
+    </p>
+    <button onclick="hideScreen('Tutorial')">Back</button>
+  </div>
+
+  <div class="timer" id="timerDisplay">00:00</div>
+
+  <script>
+    let totalSolves = 0;
+    let bestTime = null;
+    let totalTime = 0;
+
+    function startGame(gameMode) {
+      const timer = document.getElementById('timerDisplay');
+      if (gameMode === '2x2' || gameMode === '3x3') {
+        timer.style.display = 'block';
+      }
+
+      let seconds = 0;
+      let startTime = Date.now();
+      const interval = setInterval(() => {
+        seconds++;
+        const minutes = Math.floor(seconds / 60);
+        const sec = seconds % 60;
+        timer.textContent = `${String(minutes).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+      }, 1000);
+
+      document.getElementById('blankScreen').style.display = 'flex';
+
+      setTimeout(() => {
+        clearInterval(interval);
+        const endTime = Date.now();
+        const elapsedTime = (endTime - startTime) / 1000;
+        updateStats(elapsedTime);
+      }, 10000);
+    }
+    function updateThemeColor() {
+        const color = document.getElementById('themeColor').value;
+        document.body.style.backgroundColor = color;
+    }
+    
+    function updateStats(time) {
+      totalSolves++;
+      totalTime += time;
+      const averageTime = totalTime / totalSolves;
+
+      if (!bestTime || time < bestTime) {
+        bestTime = time;
+      }
+
+      document.getElementById('totalSolves').textContent = `${totalSolves}`;
+      document.getElementById('bestTime').textContent = formatTime(bestTime);
+      document.getElementById('averageTime').textContent = formatTime(averageTime);
+    }
+
+    function formatTime(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const sec = Math.round(seconds % 60);
+      return `${String(minutes).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    }
+
+    function exitGame() {
+      const timer = document.getElementById('timerDisplay');
+      timer.style.display = 'none';
+      document.getElementById('blankScreen').style.display = 'none';
+    }
+
+    function toggleStartMenu(id) {
+      const popup = document.getElementById(id);
+      popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function hideScreen(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+    function resetSettings() {
+        document.getElementById('volumeSlider').value = 50;
+        document.getElementById('resolutionSlider').value = 50;
+        document.getElementById('brightnessSlider').value = 50;
+        document.getElementById('rotationSpeedSlider').value = 50;
+        document.getElementById('RubrikSlider').value = 50;
         
-        <div class="left-buttons">
-            <h1>PLAY</h1>
-            <button onclick="ShowScreen('blankScreen')">2x2</button>
-            <button onclick="ShowScreen('blankScreen')">3x3</button>
-        </div>
-        <div class="bottom-buttons">
-            <button onclick="toggleStartMenu('popup')">Setting</button>
-            <button onclick="toggleStartMenu('Credit')">Credit</button>
-        </div>
-    </div>
-
-    <div class="content">
-        <img src="/Asset/rubik_boss_3x3.png" alt="pic">
-    </div>
-
-    <div class="blank-screen" id="blankScreen">
-        <button class="exit-button" onclick="hideScreen('blankScreen')">← EXIT</button>
-    </div>
-
-    <div class="popup" id="popup">
-        <button onclick="hideScreen('popup')">Close</button>
-        <ul>
-            <li>Sound</li>
-            <li>????</li>
-            <li>lang?</li>
-            <li>Exit</li>
-        </ul>
-    </div>
-
-    <div class="popup" id="Credit">
-        <button onclick="hideScreen('Credit')">Close</button>
-        <h1>ID: 10 15 16 18 34</h1>
-        
-    </div>
-
-    <script>
-        function ShowScreen(Screen) {
-            document.getElementById(Screen).style.display = "flex";
+    function updateColor(side) {
+        const color = document.getElementById(`${side}Color`).value;
+            
+        console.log(`Updating ${side} side color to ${color}`);
         }
-        function hideScreen(Screen) {
-            document.getElementById(Screen).style.display = "none";
+          
+        function toggleStartMenu(id) {
+            const popup = document.getElementById(id);
+            popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
         }
-        function showPopup(message) {
-            document.getElementById("popupText").innerText = message;
-            document.getElementById("popup").style.display = "block";
+          
+        function hideScreen(id) {
+            document.getElementById(id).style.display = 'none';
         }
+          
+    }
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        document.body.style.opacity = '0.5';
+      } else {
+        document.body.style.opacity = '1';
+      }
+    });
 
-        function toggleStartMenu(Screen) {
-            var menu = document.getElementById(Screen);
-            if (menu.style.display === "block") {
-                menu.style.display = "none";
-            } else {
-                menu.style.display = "block";
-            }
-        }
-        
-    </script>
+    window.addEventListener('blur', function () {
+      document.body.style.opacity = '0.5';
+    });
+
+    window.addEventListener('focus', function () {
+      document.body.style.opacity = '1';
+    });
+  </script>
 </body>
-
 </html>
