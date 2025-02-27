@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     body {
+      width: 100%;
       margin: 0;
       font-family: 'Roboto', sans-serif;
       background: rgb(0, 0, 0);
@@ -24,6 +25,7 @@
       position: relative;
       height: 100vh;
       margin-left: 10px;
+        white-space: nowrap; /* Make sure buttons stay in one line */
     }
     
     .menu .logo img {
@@ -60,15 +62,16 @@
     
     .menu .bottom-buttons {
       position: absolute;
-      bottom: 30px;
-      left: 20px;
+      bottom: 0;
       display: flex;
-      gap: 15px;
-
+      gap: 50px;
+      justify-content: center;
+      padding: 0px;
     }
     
+    
     .menu .bottom-buttons button {
-      padding: 20px;
+      padding: 28px;
       background: none;
       border: none;
       color: white;
@@ -79,7 +82,7 @@
     }
     
     .menu .bottom-buttons button:hover {
-      transform: scale(1.1);
+      transform: scale(1.1,1.1);
       background-color: lightgray;
       color: black;
     }
@@ -285,24 +288,26 @@
       margin-left: 80px;
     }
     .video-container {
-      position: absolute; 
-      top: 50px; 
-      left: 500px;
-      width: 50%; 
+      position: absolute;
+      top: 120px; /* Adjust as needed */
+      left: 30%; /* Move it a bit more to the right */
+      width: 60%; /* Make the container responsive */
     }
+    
     .video-container video {
-      width: 100%;
-      height: auto;
+      width: 100%; /* Make the video fill the container */
+      height: auto; /* Maintain aspect ratio */
+      object-fit: cover; /* Crop the video if necessary */
     }
-
   </style>
 </head>
 <body>
   <div class="video-container">
-    <video controls>
-        <source src="Background.mp4" type="video/mp4">
+    <video autoplay loop muted playsinline>
+        <source src="/Main-menu-page/Asset/Background.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
+</div>
 </div>
   <div class="menu">
     <div class="logo">
@@ -314,11 +319,16 @@
       <button onclick="startGame('3x3')">3x3</button>
     </div>
     <div class="bottom-buttons">
+      <button onclick="toggleStartMenu('Settings')">Settings</button>
+      <button onclick="toggleStartMenu('Settings')">About us</button>
+      <button onclick="toggleStartMenu('Tutorial')">Tutorial</button>
       <button onclick="toggleStartMenu('Credit')">Credit</button>
       <button onclick="toggleStartMenu('Stats')">Stat</button>
-      <button onclick="toggleStartMenu('Tutorial')">Tutorial</button>
       <button onclick="toggleStartMenu('popupcolor')">Rubrik's Color</button>
-      <button onclick="toggleStartMenu('Settings')">Settings</button>
+      <button onclick="toggleStartMenu('Settings')">Sign-up</button>
+      <button onclick="toggleStartMenu('Settings')">Log-in</button>
+
+
     </div>
   </div>
   
@@ -326,132 +336,147 @@
     <button class="exit-button" onclick="exitGame()">EXIT</button>
   </div>
 
-  <div class="popup" id="Settings">
-    <ul>
-       <li>
-            Language
-            <select id="languageSelect" onchange="updateLanguage()">
-              <option value="en">English</option>
-              <option value="es">Spanish</option>
-              <option value="fr">French</option>
-              <option value="fr">japanese</option>
-              <option value="fr">Thai</option>
-              <option value="fr">Chinese</option>
-              <option value="fr">Russia</option>
-              <option value="fr">German</option>
-              <option value="fr">Portuguese</option>
-            </select>
-      </li>
-      <li>
-        Volume (Sound)
-        <input type="range" min="0" max="100" value="50" class="slider" id="volumeSlider" />
-      </li>
-      <li>
-        Rubrik Size
-        <input type="range" min="0" max="100" value="50" class="slider" id="RubrikSlider" />
-      <li>
-        Resolution
-        <input type="range" min="0" max="100" value="50" class="slider" id="resolutionSlider" />
-      </li>
-      <li>
-        Brightness
-        <input type="range" min="0" max="100" value="50" class="slider" id="brightnessSlider" />
-      </li>
-      <li>
-        Rotation Speed
-        <input type="range" min="0" max="100" value="50" class="slider" id="rotationSpeedSlider" />
-      </li>
-        <li>
-            Theme
-            <input type="color" id="themeColor" name="themeColor" value="#ffffff" onchange="updateThemeColor()">
-        </li>        
-      <li>
-        <button onclick="resetSettings()">Reset</button>
-      </li>
-    </ul>
-    <button onclick="hideScreen('popup')">Back</button>
-  </div>
-  
-  <!-- Rubrik's Color Settings -->
-  <div class="popup" id="popupcolor">
-    <h1>Rubrik's Color</h1>
-    <ul>
-      <li>
-        <label for="frontColor">Front Side</label>
-        <input type="color" id="frontColor" onchange="updateColor('front')">
-      </li>
-      <li>
-        <label for="backColor">Back Side</label>
-        <input type="color" id="backColor" onchange="updateColor('back')">
-      </li>
-      <li>
-        <label for="leftColor">Left Side</label>
-        <input type="color" id="leftColor" onchange="updateColor('left')">
-      </li>
-      <li>
-        <label for="rightColor">Right Side</label>
-        <input type="color" id="rightColor" onchange="updateColor('right')">
-      </li>
-      <li>
-        <label for="topColor">Top Side</label>
-        <input type="color" id="topColor" onchange="updateColor('top')">
-      </li>
-      <li>
-        <label for="bottomColor">Bottom Side</label>
-        <input type="color" id="bottomColor" onchange="updateColor('bottom')">
-      </li>
-    </ul>
-    <button onclick="hideScreen('popupcolor')">Back</button>
-  </div>
-  
-  <div class="popup" id="Credit">
-    <h1>ID: 10 = Nine</h1>
-    <h2>ID: 15 = Dew</h2>
-    <h3>ID: 16 = Faris</h3>
-    <h4>ID: 18 = Bike</h4>
-    <h4>ID: 34 = Hearth</h4>
+<!-- Settings Popup -->
+<div class="popup" id="Settings">
+  <ul>
+    <li>
+      Language
+      <select id="languageSelect" onchange="updateLanguage()">
+        <option value="en">English</option>
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <option value="ja">Japanese</option>
+        <option value="th">Thai</option>
+        <option value="zh">Chinese</option>
+        <option value="ru">Russian</option>
+        <option value="de">German</option>
+        <option value="pt">Portuguese</option>
+      </select>
+    </li>
+    <li>
+      Volume (Sound)
+      <input type="range" min="0" max="100" value="50" class="slider" id="volumeSlider" />
+    </li>
+    <li>
+      Rubrik Size
+      <input type="range" min="0" max="100" value="50" class="slider" id="RubrikSlider" />
+    </li>
+    <li>
+      Resolution
+      <input type="range" min="0" max="100" value="50" class="slider" id="resolutionSlider" />
+    </li>
+    <li>
+      Brightness
+      <input type="range" min="0" max="100" value="50" class="slider" id="brightnessSlider" />
+    </li>
+    <li>
+      Rotation Speed
+      <input type="range" min="0" max="100" value="50" class="slider" id="rotationSpeedSlider" />
+    </li>
+    <li>
+      Theme
+      <input type="color" id="themeColor" name="themeColor" value="#ffffff" onchange="updateThemeColor()">
+    </li>        
+    <li>
+      <button onclick="resetSettings()">Reset</button>
+    </li>
+    <!-- Back Button -->
+    <button onclick="hideScreen('Settings')">Back</button>
+  </ul>
+</div>
 
+<!-- Rubrik's Color Settings Popup -->
+<div class="popup" id="popupcolor">
+  <h1>Rubrik's Color</h1>
+  <ul>
+    <li>
+      <label for="frontColor">Front Side</label>
+      <input type="color" id="frontColor" onchange="updateColor('front')">
+    </li>
+    <li>
+      <label for="backColor">Back Side</label>
+      <input type="color" id="backColor" onchange="updateColor('back')">
+    </li>
+    <li>
+      <label for="leftColor">Left Side</label>
+      <input type="color" id="leftColor" onchange="updateColor('left')">
+    </li>
+    <li>
+      <label for="rightColor">Right Side</label>
+      <input type="color" id="rightColor" onchange="updateColor('right')">
+    </li>
+    <li>
+      <label for="topColor">Top Side</label>
+      <input type="color" id="topColor" onchange="updateColor('top')">
+    </li>
+    <li>
+      <label for="bottomColor">Bottom Side</label>
+      <input type="color" id="bottomColor" onchange="updateColor('bottom')">
+    </li>
+  </ul>
+  <button onclick="hideScreen('popupcolor')">Back</button>
+</div>
 
-    <button onclick="hideScreen('Credit')">Back</button>
-  </div>
+<!-- Credits Popup -->
+<div class="popup" id="Credit" style="text-align: left; padding-left: 20px;">
+  <h1>Our Developers</h1>
+  <p><strong>ID10: Nine</strong></p>
+  <p><strong>ID15: Dew</strong></p>
+  <p><strong>ID16: Faris</strong></p>
+  <p><strong>ID18: Bike</strong></p>
+  <p><strong>ID34: Hearth</strong></p>
+  <button onclick="hideScreen('Credit')">Back</button>
+</div>
 
-  <div class="popup" id="Stats">
-    <div class="stats">
-      <div class="stat">
-        <span>Total Solves:</span> <span id="totalSolves">0</span>
-      </div>
-      <div class="stat">
-        <span>Best Time:</span> <span id="bestTime">--:--</span>
-      </div>
-      <div class="stat">
-        <span>Average Time:</span> <span id="averageTime">--:--</span>
-      </div>
+<!-- Stats Popup -->
+<div class="popup" id="Stats">
+  <div class="stats">
+    <div class="stat">
+      <span>Total Solves:</span> <span id="totalSolves">0</span>
     </div>
-    <button onclick="hideScreen('Stats')">Back</button>
-    
+    <div class="stat">
+      <span>Best Time:</span> <span id="bestTime">--:--</span>
+    </div>
+    <div class="stat">
+      <span>Average Time:</span> <span id="averageTime">--:--</span>
+    </div>
   </div>
+  <button onclick="hideScreen('Stats')">Back</button>
+</div>
+<!-- Tutorial Popup -->
+<div class="popuptutorial" id="Tutorial">
+  <h1>How to Play:</h1>
+  
+  <p><strong>Select Your Mode:</strong><br />
+    Choose the size of your Rubik's Cube (2x2 or 3x3)
+  </p>
+  
+  <p><strong>Controls & Movement:</strong><br />
+    Mouse/Touch: Click and drag a face of the cube to rotate it.<br />
+    Keyboard (if supported): Use arrow keys or designated keys to rotate specific layers.<br />
+    Hand Gesture Control (using camera): Use your hand movements detected by the webcam to interact with and rotate the Rubik’s Cube.
+  </p>
 
-  <div class="popuptutorial" id="Tutorial">
-    <h1>How to Play:</h1>
-    <p><strong>Select Your Mode:</strong><br />
-      Choose 2x2 for a simpler puzzle or 3x3 for a more challenging experience by clicking the respective button.
-    </p>
-    <p><strong>Controls & Movement:</strong><br />
-      Mouse/Touch: Click and drag a face of the cube to rotate it.<br />
-      Keyboard (if supported): Use arrow keys or designated keys to rotate specific layers.
-    </p>
-    <p><strong>Timing & Moves:</strong><br />
-      When you start the game, a timer begins. Try to solve the cube as quickly as possible.<br />
-      Your moves are tracked, so aim to use the fewest moves to achieve a high score.
-    </p>
-    <p><strong>Using Menus:</strong><br />
-      Settings: Adjust volume, language, resolution, brightness, and rotation speed by clicking the Settings button (located on the right).<br />
-      Credits & Stats: Access information about the developers and view your gameplay statistics (total solves, best time, average time).
-    </p>
-    <button onclick="hideScreen('Tutorial')">Back</button>
-  </div>
+  <p><strong>Timing & Moves:</strong><br />
+    When you start the game, a timer will begin. Try to solve the cube as quickly as possible.<br />
+    Your moves are tracked, so aim to use the fewest moves for a high score.
+  </p>
 
-  <div class="timer" id="timerDisplay">00:00</div>
+  <p><strong>Using Menus:</strong><br />
+    Settings: Adjust volume, language, resolution, brightness, and rotation speed by clicking the Settings button (located on the right).<br />
+    Rubik’s Cube Size: Choose between 2x2 or 3x3 cube sizes.<br />
+    Stats: View your gameplay statistics such as Total Solves, Best Time, and Average Time.<br />
+    Credits: Access information about the developers and contributors.<br />
+    Song Selection: You can also choose a background song to play while solving the puzzle.
+  </p>
+
+  <p><strong>Additional Features:</strong><br />
+    Customize the cube's colors through the Rubik's Color Settings in the Settings menu. To reset your settings, click the Reset button.
+  </p>
+
+  <button onclick="hideScreen('Tutorial')">Back</button>
+</div>
+
 
   <script>
     let totalSolves = 0;
