@@ -1648,13 +1648,12 @@ class Timer extends Animation {
         this.convert();
         super.stop();
         //Finished
-        const performanceText = document.querySelector("performance__screen");
+        const performanceText = document.querySelector("performance--text");
         gsap.to(".performance__screen",{
             scaleX: 1,
             scaleY:1,
             duration: 0.5,
         });
-
         //Add ding sound
         //Performance screen popup(Best time, personal record etc.)
         //Add confetti effect???
@@ -1857,6 +1856,9 @@ class Game {
             buttons: {
                 scrambleButton: document.querySelector('#scrambleButton'),
                 resetButton: document.querySelector('#resetButton')
+            },
+            sliders: {
+                HandgestureMode: document.querySelector('#handgesture_switch')
             }
         };
 
@@ -1921,6 +1923,7 @@ class Game {
     initButtons() {
         this.dom.buttons.scrambleButton.addEventListener('click', () => this.scrambleAndStart());
         this.dom.buttons.resetButton.addEventListener('click', () => this.resetGame());
+        this.dom.sliders.HandgestureMode.addEventListener('click', ()=> console.log("HandgestureActivate"))
     }
 
     scrambleAndStart() {
