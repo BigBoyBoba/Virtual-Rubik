@@ -183,6 +183,12 @@ input:checked + .slider:before {
     background-color: #000000; 
 }
 
+.usercam{
+    position: absolute;
+    top: 25vh;
+    right: 5vh;
+}
+
 .game {
     height: 70vh;
     background-color: rgba(255, 255, 255, 0.1);

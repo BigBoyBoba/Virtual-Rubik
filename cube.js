@@ -1859,9 +1859,13 @@ class Game {
             },
             sliders: {
                 HandgestureMode: document.querySelector('#handgesture_switch')
+            },
+            videos: {
+                userCam: document.querySelector('#usercam')
             }
         };
 
+        this.camStream = null;
         this.world = new World(this);
         this.cube = new Cube(this);
         this.controls = new Controls(this);
@@ -1885,6 +1889,10 @@ class Game {
     }
 
     initVisual(){
+        gsap.to(".usercam",{
+            scaleY:0,
+            duration:0
+        })
         setTimeout(() => {
             gsap.to(".blockinglogo",{
                 scaleY:0,
@@ -1923,7 +1931,45 @@ class Game {
     initButtons() {
         this.dom.buttons.scrambleButton.addEventListener('click', () => this.scrambleAndStart());
         this.dom.buttons.resetButton.addEventListener('click', () => this.resetGame());
-        this.dom.sliders.HandgestureMode.addEventListener('click', ()=> console.log("HandgestureActivate"))
+        this.dom.sliders.HandgestureMode.addEventListener('click', ()=> {
+            if(this.dom.sliders.HandgestureMode.checked){
+                fetch("/switch_on", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ switch_state: "on" })
+                }).catch(err=>{console.log("POST Error: ", err);});
+                navigator.mediaDevices.getUserMedia({video: true})
+                    .then(stream=>{this.dom.videos.userCam.srcObject = stream; this.camStream = stream;})  
+                    .catch(err=>{console.log("Error accessing webcam: ", err)});
+                gsap.to(".usercam",{
+                    scaleY:1,
+                    duration:0.35
+                })
+                console.log("Activate");
+            } else{
+                fetch("/switch_off", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ switch_state: "off" })
+                }).catch(err=>{console.log("POST Error: ", err);});
+                console.log("Deactivate");
+                gsap.to(".usercam",{
+                    scaleY:0,
+                    duration:0.35
+                })
+                if(this.camStream){
+                    let tracks = this.camStream.getTracks();
+                    tracks.forEach(track=>track.stop());
+                    //this.dom.videos.userCam.srcObject = null;
+                }
+                
+                
+            }
+        })
     }
 
     scrambleAndStart() {
