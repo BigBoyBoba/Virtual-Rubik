@@ -112,7 +112,7 @@ input:checked + .slider:before {
     position: absolute;
     top: 10vh;
     left: 10vh;
-    height: 50vh;
+    height: 30vh;
     width: 60vh;
     background-color: #1a1a1a;
 }
@@ -132,14 +132,19 @@ input:checked + .slider:before {
     color: white;
 }
 
-.performance--info pre{
+.performance--info {
     font-family: 'Seven Segment', sans-serif;
-    position: absolute;
-    left: 1vh;
-    top: 5vh;
     font-size: 5vh;
     font-weight: bold;
     color: white;
+    position: absolute;
+    left: 5vh;
+    top: 10vh;
+
+}
+
+#text--best{
+    margin-top: 5vh;    
 }
 
 .blockinglogo{
@@ -214,15 +219,15 @@ input:checked + .slider:before {
 }
 
 
-.ui__buttonsbutton img {
+.ui__buttons button img {
     height: 100%;
     width: auto;
 }
 
-.ui__buttonsbutton:hover {
+.ui__buttons button:hover {
     background-color: #312c2b;
 }
 
-.ui__buttonsbutton:active {
+.ui__buttons button:active {
     transform: scale(0.95);
 }

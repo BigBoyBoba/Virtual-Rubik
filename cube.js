@@ -1,3 +1,11 @@
+const Sounds = [
+    new Audio('sounds/drag1.wav'),
+    new Audio('sounds/drag2.wav'),
+    new Audio('sounds/drag3.wav'),
+    new Audio('sounds/drag4.wav'),
+    new Audio('sounds/drag5.wav')
+];
+
 const animationEngine = (() => {
     let uniqueID = 0;
 
@@ -946,6 +954,8 @@ class Controls {
         this.scramble = null;
         this.state = STILL;
 
+        this.lastSoundTime = 0;
+
         this.initDraggable();
 
     }
@@ -1014,6 +1024,12 @@ class Controls {
 
             if (this.scramble !== null) return;
             if (this.state === STILL || (this.state === ANIMATING && this.gettingDrag === false)) return;
+
+            const now = Date.now();
+            if (now - this.lastSoundTime > 150) {  // Avoid too frequent sounds
+                this.playRandomDragSound();
+                this.lastSoundTime = now;
+            }
 
             const planeIntersect = this.getIntersect(position.current, this.helper, false);
             if (planeIntersect === false) return;
@@ -1404,6 +1420,11 @@ class Controls {
 
     }
 
+    playRandomDragSound() {
+        const sound = Sounds[Math.floor(Math.random() * Sounds.length)];
+        sound.currentTime = 0;  // Reset sound if played before
+        sound.play();
+    }
 }
 
 class Scrambler {
@@ -1514,10 +1535,9 @@ class Timer extends Animation {
     stop() {
         this.currentTime = Date.now();
         this.deltaTime = this.currentTime - this.startTime;
-        this.convert();
+        this.convert(this.deltaTime);
         super.stop();
         //Finished
-        const performanceText = document.querySelector("performance--text");
         gsap.to(".performance__screen", {
             scaleX: 1,
             scaleY: 1,
@@ -1526,6 +1546,15 @@ class Timer extends Animation {
         //Add ding sound
         //Performance screen popup(Best time, personal record etc.)
         //Add confetti effect???
+
+        this.game.finishedtime_raw = this.deltaTime;
+        if(this.game.besttime_raw == 0 || this.game.besttime_raw > this.deltaTime){
+            this.game.besttime_raw = this.deltaTime;
+            this.game.dom.texts.besttime.innerHTML = "Best time: "+ this.converted;
+        }
+        this.game.dom.texts.finishedtime.innerHTML = "Finished time: " + this.converted;
+
+
         this.converted = "SOLVED";
         this.setText();
     }
@@ -1534,18 +1563,17 @@ class Timer extends Animation {
         const old = this.converted;
         this.currentTime = Date.now();
         this.deltaTime = this.currentTime - this.startTime;
-        this.convert();
+        this.convert(this.deltaTime);
 
         if (this.converted != old) {
-            localStorage.setItem('theCube_time', this.deltaTime);
             this.setText();
         }
 
     }
 
-    convert() {
-        const seconds = parseInt((this.deltaTime / 1000) % 60);
-        const minutes = parseInt((this.deltaTime / (1000 * 60)));
+    convert(deltaTime) {
+        const seconds = parseInt((deltaTime / 1000) % 60);
+        const minutes = parseInt((deltaTime / (1000 * 60)));
         this.converted = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
     }
 
@@ -1745,7 +1773,9 @@ class Game {
         this.dom = {
             game: document.querySelector('.game'),
             texts: {
-                timer: document.querySelector('.text--timer')
+                timer: document.querySelector('.text--timer'),
+                besttime: document.querySelector('#text--best'),
+                finishedtime: document.querySelector('#text--finished')
             },
             buttons: {
                 scrambleButton: document.querySelector('#scrambleButton'),
@@ -1771,6 +1801,10 @@ class Game {
         this.initGame();
         this.initButtons();
         this.initVisual();
+
+
+        this.besttime_raw = 0;
+        this.finishedtime_raw = 0;
     }
 
 
