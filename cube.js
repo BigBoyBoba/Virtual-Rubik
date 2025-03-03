@@ -1846,6 +1846,40 @@ class Themes {
     }
 }
 
+class Video extends Animation {
+    constructor(game){
+        super(true);
+        this.usercam = game.dom.videos.userCam;
+        this.camstream = null;
+    }
+
+    activate(){
+                navigator.mediaDevices.getUserMedia({video: true})
+                    .then(stream=>{this.usercam.srcObject = stream; this.camstream = stream;})
+                    .catch(err=>{console.log("Error accessing webcam: ", err)});
+                gsap.to(".usercam",{
+                    scaleY:1,
+                    duration:0.35
+                })
+    }
+
+    deactivate(){
+                gsap.to(".usercam",{
+                    scaleY:0,
+                    duration:0.35
+                })
+                if(this.camstream){
+                    let tracks = this.camstream.getTracks();
+                    tracks.forEach(track=>track.stop());
+                    //this.usercam.srcObject = null; // commented out for visual purpose
+                }
+    }
+
+    update(){
+        
+    }
+}
+
 class Game {
     constructor() {
         this.dom = {
@@ -1865,7 +1899,7 @@ class Game {
             }
         };
 
-        this.camStream = null;
+        this.video = new Video(this);
         this.world = new World(this);
         this.cube = new Cube(this);
         this.controls = new Controls(this);
@@ -1879,7 +1913,7 @@ class Game {
         this.initVisual();
     }
 
-    
+
 
     initGame() {
         this.cube.init();
@@ -1900,7 +1934,7 @@ class Game {
                 duration:0.2
             })
         }, 1000);
-        
+
         setTimeout(()=>{
             gsap.to(".blockinglogo",{
                 left:"200%",
@@ -1917,21 +1951,24 @@ class Game {
                 ease: "power2.out"
 
             });
-            gsap.to(".blockingscreen2",{    
+            gsap.to(".blockingscreen2",{
                 left:"100%",
                 duration: 0.5,
                 ease: "power2.out"
 
-            });  
-            
+            });
+
         },1500)
-           
+
     }
 
     initButtons() {
         this.dom.buttons.scrambleButton.addEventListener('click', () => this.scrambleAndStart());
         this.dom.buttons.resetButton.addEventListener('click', () => this.resetGame());
-        this.dom.sliders.HandgestureMode.addEventListener('click', ()=> {
+        this.dom.sliders.HandgestureMode.addEventListener('click', ()=> this.handGestureState());
+    }
+
+    handGestureState() {
             if(this.dom.sliders.HandgestureMode.checked){
                 fetch("/switch_on", {
                     method: "POST",
@@ -1940,13 +1977,7 @@ class Game {
                     },
                     body: JSON.stringify({ switch_state: "on" })
                 }).catch(err=>{console.log("POST Error: ", err);});
-                navigator.mediaDevices.getUserMedia({video: true})
-                    .then(stream=>{this.dom.videos.userCam.srcObject = stream; this.camStream = stream;})  
-                    .catch(err=>{console.log("Error accessing webcam: ", err)});
-                gsap.to(".usercam",{
-                    scaleY:1,
-                    duration:0.35
-                })
+                this.video.activate();
                 console.log("Activate");
             } else{
                 fetch("/switch_off", {
@@ -1956,20 +1987,9 @@ class Game {
                     },
                     body: JSON.stringify({ switch_state: "off" })
                 }).catch(err=>{console.log("POST Error: ", err);});
+                this.video.deactivate();
                 console.log("Deactivate");
-                gsap.to(".usercam",{
-                    scaleY:0,
-                    duration:0.35
-                })
-                if(this.camStream){
-                    let tracks = this.camStream.getTracks();
-                    tracks.forEach(track=>track.stop());
-                    //this.dom.videos.userCam.srcObject = null;
-                }
-                
-                
             }
-        })
     }
 
     scrambleAndStart() {
