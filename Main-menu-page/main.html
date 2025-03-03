@@ -56,8 +56,9 @@
     
     .menu .left-buttons button:hover {
       background: lightgray;
-      color: black;
+      color: rgb(0, 0, 0);
       border-color: #333;
+
     }
     
     .menu .bottom-buttons {
@@ -88,34 +89,6 @@
       background-color: lightgray;
       color: black;
     }
-    
-    .right-buttons {
-      position: fixed;
-      top: 50%;
-      right: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      transform: translateY(-50%);
-    }
-    
-    .right-buttons button {
-      padding: 20px;
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-size: 24px;
-      transition: transform 0.2s, background-color 0.2s ease-in-out;
-      border-radius: 5px;
-    }
-    
-    .right-buttons button:hover {
-      transform: scale(1.1);
-      background-color: lightgray;
-      color: black;
-    }
-    
     .popup {
       display: none;
       position: fixed;
@@ -272,24 +245,23 @@
       left: 350px; 
       width: 70%;
     }
-    /* Full-screen Logo */
     .full-screen-logo {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: black; /* Background to make it stand out */
+      background-color: black; 
       display: flex;
       justify-content: center;
       align-items: center;
-      opacity: 1; /* Initially visible */
-      transition: opacity 2s ease-out; /* For fade-out effect */
-      z-index: 9999; /* To ensure it's on top of other content */
+      opacity: 1; 
+      transition: opacity 2s ease-out;
+      z-index: 9999; 
     }
 
     .full-screen-logo img {
-      width: 50%; /* Adjust the size of the logo */
+      width: 50%;
       height: auto;
       align-items: center;
       
@@ -473,7 +445,7 @@
   <p><strong>Instagram:</strong> RubrikDoraemon</p>
   <p><strong>TikTok:</strong> RubrikSpeed!</p>
   <p><strong>Tel:</strong> 0123456789</p>
-  <p><strong>Address:</strong> 🌑🌒🌓🌔 (Moon Language for "123 Lunar St., Moon Base")</p>
+  <p><strong>Address:</strong> 223 M.1 Nong-mai-dang, Muang, Chonburi 20000 Tel: 0938638510 Fax: 038-758-427</p>
   <button onclick="hideScreen('Aboutus')">Back</button>
 </div>
 
@@ -536,15 +508,15 @@
       // Show the full-screen logo
       const fullScreenLogo = document.getElementById('fullScreenLogo');
       
-      // Set a timeout to make the logo fade out after 5 seconds
+      // Set a timeout
       setTimeout(function() {
         fullScreenLogo.style.opacity = '0'; // Start fading out
-      }, 1000); // 3 seconds
+      }, 2000); // 1 seconds
       
       // Optional: Hide the logo completely after the fade-out
       setTimeout(function() {
         fullScreenLogo.style.display = 'none';
-      }, 4000); // 2 seconds after fade-out (total of 5 seconds)
+      }, 8000); // 3 seconds after fade-out
     };
     
   </script>
