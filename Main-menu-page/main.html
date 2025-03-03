@@ -62,16 +62,16 @@
     
     .menu .bottom-buttons {
       position: absolute;
-      bottom: 0;
+      bottom: 0px;
       display: flex;
-      gap: 50px;
-      justify-content: center;
+      gap: 170px;
+      justify-content: left;
       padding: 0px;
     }
     
     
     .menu .bottom-buttons button {
-      padding: 28px;
+      padding: 30px;
       background: none;
       border: none;
       color: white;
@@ -79,6 +79,8 @@
       font-size: 24px;
       transition: transform 0.2s, background-color 0.2s ease-in-out;
       border-radius: 5px;
+      gap: 0px;
+
     }
     
     .menu .bottom-buttons button:hover {
@@ -253,29 +255,6 @@
       margin-left: 5px;
     }
     
-    .timer {
-      display: none;
-      font-size: 40px;
-      font-weight: bold;
-      color: white;
-      margin-top: 20px;
-    }
-    
-    .stats {
-      display: flex;
-      flex-direction: column;
-      font-size: 18px;
-      margin-left: 20px;
-      text-align: left;
-    }
-    
-    .stats .stat {
-      margin-bottom: 10px;
-    }
-    
-    .stats .stat span {
-      font-weight: 700;
-    }
     body.logo {
       padding: 1px;
       background: none;
@@ -289,19 +268,48 @@
     }
     .video-container {
       position: absolute;
-      top: 120px; /* Adjust as needed */
-      left: 30%; /* Move it a bit more to the right */
-      width: 60%; /* Make the container responsive */
+      top: 100px; 
+      left: 350px; 
+      width: 70%;
+    }
+    /* Full-screen Logo */
+    .full-screen-logo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black; /* Background to make it stand out */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 1; /* Initially visible */
+      transition: opacity 2s ease-out; /* For fade-out effect */
+      z-index: 9999; /* To ensure it's on top of other content */
+    }
+
+    .full-screen-logo img {
+      width: 50%; /* Adjust the size of the logo */
+      height: auto;
+      align-items: center;
+      
     }
     
     .video-container video {
-      width: 100%; /* Make the video fill the container */
-      height: auto; /* Maintain aspect ratio */
-      object-fit: cover; /* Crop the video if necessary */
+      width: 100%; 
+      height: auto; 
+      object-fit: cover; 
     }
+    
   </style>
 </head>
 <body>
+
+  <!-- Full-screen logo -->
+<div id="fullScreenLogo" class="full-screen-logo">
+  <img src="/Main-menu-page/Asset/rubik_boss_3x3.png" alt="Full-screen Logo" />
+</div>
+
   <div class="video-container">
     <video autoplay loop muted playsinline>
         <source src="/Main-menu-page/Asset/Background.mp4" type="video/mp4">
@@ -319,17 +327,11 @@
       <button onclick="startGame('3x3')">3x3</button>
     </div>
     <div class="bottom-buttons">
-      <button onclick="toggleStartMenu('Settings')">Settings</button>
-      <button onclick="toggleStartMenu('Settings')">About us</button>
+      <button onclick="toggleStartMenu('Settings')">Setting</button>
+      <button onclick="toggleStartMenu('popupcolor')">Rubrik's Color</button>
       <button onclick="toggleStartMenu('Tutorial')">Tutorial</button>
       <button onclick="toggleStartMenu('Credit')">Credit</button>
-      <button onclick="toggleStartMenu('Stats')">Stat</button>
-      <button onclick="toggleStartMenu('popupcolor')">Rubrik's Color</button>
-      <button onclick="toggleStartMenu('Settings')">Sign-up</button>
-      <button onclick="toggleStartMenu('Settings')">Log-in</button>
-
-
-    </div>
+      <button onclick="toggleStartMenu('Aboutus')">About us</button>    </div>
   </div>
   
   <div class="blank-screen" id="blankScreen">
@@ -351,6 +353,7 @@
         <option value="ru">Russian</option>
         <option value="de">German</option>
         <option value="pt">Portuguese</option>
+        <option value="pt">Russian</option>
       </select>
     </li>
     <li>
@@ -425,24 +428,11 @@
   <p><strong>ID16: Faris</strong></p>
   <p><strong>ID18: Bike</strong></p>
   <p><strong>ID34: Hearth</strong></p>
+  <p>Copyright (c) 2025 RubrikPigachu</p>
   <button onclick="hideScreen('Credit')">Back</button>
 </div>
 
-<!-- Stats Popup -->
-<div class="popup" id="Stats">
-  <div class="stats">
-    <div class="stat">
-      <span>Total Solves:</span> <span id="totalSolves">0</span>
-    </div>
-    <div class="stat">
-      <span>Best Time:</span> <span id="bestTime">--:--</span>
-    </div>
-    <div class="stat">
-      <span>Average Time:</span> <span id="averageTime">--:--</span>
-    </div>
-  </div>
-  <button onclick="hideScreen('Stats')">Back</button>
-</div>
+
 <!-- Tutorial Popup -->
 <div class="popuptutorial" id="Tutorial">
   <h1>How to Play:</h1>
@@ -477,61 +467,19 @@
   <button onclick="hideScreen('Tutorial')">Back</button>
 </div>
 
+<!-- About us -->
+<div class="popuptutorial" id="Aboutus"> <h1>About Us</h1>
+  <p><strong>Facebook:</strong> RubrikPigachu</p>
+  <p><strong>Instagram:</strong> RubrikDoraemon</p>
+  <p><strong>TikTok:</strong> RubrikSpeed!</p>
+  <p><strong>Tel:</strong> 0123456789</p>
+  <p><strong>Address:</strong> 🌑🌒🌓🌔 (Moon Language for "123 Lunar St., Moon Base")</p>
+  <button onclick="hideScreen('Aboutus')">Back</button>
+</div>
+
+
 
   <script>
-    let totalSolves = 0;
-    let bestTime = null;
-    let totalTime = 0;
-
-    function startGame(gameMode) {
-      const timer = document.getElementById('timerDisplay');
-      if (gameMode === '2x2' || gameMode === '3x3') {
-        timer.style.display = 'block';
-      }
-
-      let seconds = 0;
-      let startTime = Date.now();
-      const interval = setInterval(() => {
-        seconds++;
-        const minutes = Math.floor(seconds / 60);
-        const sec = seconds % 60;
-        timer.textContent = `${String(minutes).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
-      }, 1000);
-
-      document.getElementById('blankScreen').style.display = 'flex';
-
-      setTimeout(() => {
-        clearInterval(interval);
-        const endTime = Date.now();
-        const elapsedTime = (endTime - startTime) / 1000;
-        updateStats(elapsedTime);
-      }, 10000);
-    }
-    function updateThemeColor() {
-        const color = document.getElementById('themeColor').value;
-        document.body.style.backgroundColor = color;
-    }
-    
-    function updateStats(time) {
-      totalSolves++;
-      totalTime += time;
-      const averageTime = totalTime / totalSolves;
-
-      if (!bestTime || time < bestTime) {
-        bestTime = time;
-      }
-
-      document.getElementById('totalSolves').textContent = `${totalSolves}`;
-      document.getElementById('bestTime').textContent = formatTime(bestTime);
-      document.getElementById('averageTime').textContent = formatTime(averageTime);
-    }
-
-    function formatTime(seconds) {
-      const minutes = Math.floor(seconds / 60);
-      const sec = Math.round(seconds % 60);
-      return `${String(minutes).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
-    }
-
     function exitGame() {
       const timer = document.getElementById('timerDisplay');
       timer.style.display = 'none';
@@ -584,6 +532,21 @@
     window.addEventListener('focus', function () {
       document.body.style.opacity = '1';
     });
+    window.onload = function() {
+      // Show the full-screen logo
+      const fullScreenLogo = document.getElementById('fullScreenLogo');
+      
+      // Set a timeout to make the logo fade out after 5 seconds
+      setTimeout(function() {
+        fullScreenLogo.style.opacity = '0'; // Start fading out
+      }, 1000); // 3 seconds
+      
+      // Optional: Hide the logo completely after the fade-out
+      setTimeout(function() {
+        fullScreenLogo.style.display = 'none';
+      }, 4000); // 2 seconds after fade-out (total of 5 seconds)
+    };
+    
   </script>
 </body>
 </html>
