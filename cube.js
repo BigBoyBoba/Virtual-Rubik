@@ -245,17 +245,7 @@ function RoundedBoxGeometry(size, radius, radiusSegments) {
 
     function doCorners() {
 
-        var flips = [
-            true,
-            false,
-            true,
-            false,
-            false,
-            true,
-            false,
-            true
-        ];
-
+        const flips = [true, false, true, false, false, true, false, true];
         var lastRowOffset = rs1 * (radiusSegments - 1);
 
         for (var i = 0; i < 8; i++) {
@@ -269,31 +259,16 @@ function RoundedBoxGeometry(size, radius, radiusSegments) {
 
                 for (var u = 0; u < radiusSegments; u++) {
 
-                    var u1 = u + 1;
                     var a = cornerOffset + r1 + u;
-                    var b = cornerOffset + r1 + u1;
+                    var b = a + 1;
                     var c = cornerOffset + r2 + u;
-                    var d = cornerOffset + r2 + u1;
+                    var d = c + 1;
 
-                    if (!flips[i]) {
-
-                        indices.push(a);
-                        indices.push(b);
-                        indices.push(c);
-
-                        indices.push(b);
-                        indices.push(d);
-                        indices.push(c);
-
+                    
+                    if (flips[i]) {
+                        indices.push(a, c, b, b, c, d);
                     } else {
-
-                        indices.push(a);
-                        indices.push(c);
-                        indices.push(b);
-
-                        indices.push(b);
-                        indices.push(c);
-                        indices.push(d);
+                        indices.push(a, b, c, b, d, c);
 
                     }
 
@@ -302,25 +277,10 @@ function RoundedBoxGeometry(size, radius, radiusSegments) {
             }
 
             for (var u = 0; u < radiusSegments; u++) {
-
                 var a = cornerOffset + lastRowOffset + u;
-                var b = cornerOffset + lastRowOffset + u + 1;
+                var b = a + 1;
                 var c = cornerOffset + lastVertex;
-
-                if (!flips[i]) {
-
-                    indices.push(a);
-                    indices.push(b);
-                    indices.push(c);
-
-                } else {
-
-                    indices.push(a);
-                    indices.push(c);
-                    indices.push(b);
-
-                }
-
+                indices.push(a, flips[i] ? c : b, flips[i] ? b : c);
             }
 
         }
@@ -328,78 +288,48 @@ function RoundedBoxGeometry(size, radius, radiusSegments) {
     }
 
     function doFaces() {
-
+        
         var a = lastVertex;
         var b = lastVertex + cornerVertNumber;
         var c = lastVertex + cornerVertNumber * 2;
         var d = lastVertex + cornerVertNumber * 3;
 
-        indices.push(a);
-        indices.push(b);
-        indices.push(c);
-        indices.push(a);
-        indices.push(c);
-        indices.push(d);
+        indices.push(a, b, c, a, c, d);
 
         a = lastVertex + cornerVertNumber * 4;
         b = lastVertex + cornerVertNumber * 5;
         c = lastVertex + cornerVertNumber * 6;
         d = lastVertex + cornerVertNumber * 7;
 
-        indices.push(a);
-        indices.push(c);
-        indices.push(b);
-        indices.push(a);
-        indices.push(d);
-        indices.push(c);
+        indices.push(a, c, b, a, d, c);
 
         a = 0;
         b = cornerVertNumber;
         c = cornerVertNumber * 4;
         d = cornerVertNumber * 5;
 
-        indices.push(a);
-        indices.push(c);
-        indices.push(b);
-        indices.push(b);
-        indices.push(c);
-        indices.push(d);
+        indices.push(a, c, b, b, c, d);
 
         a = cornerVertNumber * 2;
         b = cornerVertNumber * 3;
         c = cornerVertNumber * 6;
         d = cornerVertNumber * 7;
 
-        indices.push(a);
-        indices.push(c);
-        indices.push(b);
-        indices.push(b);
-        indices.push(c);
-        indices.push(d);
+        indices.push(a, c, b, b, c, d);
 
         a = radiusSegments;
         b = radiusSegments + cornerVertNumber * 3;
         c = radiusSegments + cornerVertNumber * 4;
         d = radiusSegments + cornerVertNumber * 7;
 
-        indices.push(a);
-        indices.push(b);
-        indices.push(c);
-        indices.push(b);
-        indices.push(d);
-        indices.push(c);
+        indices.push(a, b, c, b, d, c);
 
         a = radiusSegments + cornerVertNumber;
         b = radiusSegments + cornerVertNumber * 2;
         c = radiusSegments + cornerVertNumber * 5;
         d = radiusSegments + cornerVertNumber * 6;
 
-        indices.push(a);
-        indices.push(c);
-        indices.push(b);
-        indices.push(b);
-        indices.push(c);
-        indices.push(d);
+        indices.push(a, c, b, b, c, d);
 
     }
 
@@ -413,29 +343,16 @@ function RoundedBoxGeometry(size, radius, radiusSegments) {
 
             for (var u = 0; u < radiusSegments; u++) {
 
-                var u1 = u + 1;
                 var a = cOffset + u;
-                var b = cOffset + u1;
+                var b = a+1;
                 var c = cRowOffset + u;
-                var d = cRowOffset + u1;
+                var d = c+1;
 
-                if (!needsFlip) {
-
-                    indices.push(a);
-                    indices.push(b);
-                    indices.push(c);
-                    indices.push(b);
-                    indices.push(d);
-                    indices.push(c);
+                if (needsFlip) {
+                    indices.push(a, c, b, b, c, d);
 
                 } else {
-
-                    indices.push(a);
-                    indices.push(c);
-                    indices.push(b);
-                    indices.push(b);
-                    indices.push(c);
-                    indices.push(d);
+                    indices.push(a, b, c, b, d, c);     
 
                 }
 
@@ -447,50 +364,31 @@ function RoundedBoxGeometry(size, radius, radiusSegments) {
 
     function doDepthEdges() {
 
-        var cStarts = [0, 2, 4, 6];
-        var cEnds = [1, 3, 5, 7];
+        var pairs = [[0, 1], [2, 3], [4, 5], [6, 7]];
 
-        for (var i = 0; i < 4; i++) {
+        pairs.forEach(([start, end], i) => {
+            var cStart = cornerVertNumber * start;
+            var cEnd = cornerVertNumber * end;
 
-            var cStart = cornerVertNumber * cStarts[i];
-            var cEnd = cornerVertNumber * cEnds[i];
-
-            var needsFlip = 1 >= i;
+            var needsFlip = i < 2;
 
             for (var u = 0; u < radiusSegments; u++) {
 
                 var urs1 = u * rs1;
-                var u1rs1 = (u + 1) * rs1;
 
                 var a = cStart + urs1;
-                var b = cStart + u1rs1;
+                var b = a + rs1;
                 var c = cEnd + urs1;
-                var d = cEnd + u1rs1;
+                var d = c + rs1;
 
                 if (needsFlip) {
-
-                    indices.push(a);
-                    indices.push(c);
-                    indices.push(b);
-                    indices.push(b);
-                    indices.push(c);
-                    indices.push(d);
+                    indices.push(a, c, b, b, c, d);
 
                 } else {
-
-                    indices.push(a);
-                    indices.push(b);
-                    indices.push(c);
-                    indices.push(b);
-                    indices.push(d);
-                    indices.push(c);
-
+                    indices.push(a, b, c, b, d, c);
                 }
-
             }
-
-        }
-
+        });
     }
 
     function doWidthEdges() {
@@ -514,23 +412,11 @@ function RoundedBoxGeometry(size, radius, radiusSegments) {
                 var c = cEnd + radiusSegments + u * rs1;
                 var d = cEnd + (u != end ? radiusSegments + (u + 1) * rs1 : cornerVertNumber - 1);
 
-                if (!needsFlip[i]) {
-
-                    indices.push(a);
-                    indices.push(b);
-                    indices.push(c);
-                    indices.push(b);
-                    indices.push(d);
-                    indices.push(c);
+                if (needsFlip[i]) {
+                    indices.push(a, c, b, b, c, d);
 
                 } else {
-
-                    indices.push(a);
-                    indices.push(c);
-                    indices.push(b);
-                    indices.push(b);
-                    indices.push(c);
-                    indices.push(d);
+                    indices.push(a, b, c, b, d, c);
 
                 }
 
@@ -573,30 +459,26 @@ RoundedBoxGeometry.constructor = RoundedBoxGeometry;
 
 function RoundedPlaneGeometry(size, radius, depth) {
 
-    var x, y, width, height;
+    var half, width, height;
 
-    x = y = - size / 2;
+    half = - size / 2;
     width = height = size;
     radius = size * radius;
 
     const shape = new THREE.Shape();
 
-    shape.moveTo(x, y + radius);
-    shape.lineTo(x, y + height - radius);
-    shape.quadraticCurveTo(x, y + height, x + radius, y + height);
-    shape.lineTo(x + width - radius, y + height);
-    shape.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
-    shape.lineTo(x + width, y + radius);
-    shape.quadraticCurveTo(x + width, y, x + width - radius, y);
-    shape.lineTo(x + radius, y);
-    shape.quadraticCurveTo(x, y, x, y + radius);
+    shape.moveTo(half, half + radius);
+    shape.lineTo(half, half + height - radius);
+    shape.quadraticCurveTo(half, half + height, half + radius, half + height);
+    shape.lineTo(half + width - radius, half + height);
+    shape.quadraticCurveTo(half + width, half + height, half + width, half + height - radius);
+    shape.lineTo(half + width, half + radius);
+    shape.quadraticCurveTo(half + width, half, half + width - radius, half);
+    shape.lineTo(half + radius, half);
+    shape.quadraticCurveTo(half, half, half, half + radius);
 
-    const geometry = new THREE.ExtrudeBufferGeometry(
-        shape,
-        { depth: depth, bevelEnabled: false, curveSegments: 3 }
-    );
+    return new THREE.ExtrudeBufferGeometry(shape, { depth, bevelEnabled: false, curveSegments: 3 });
 
-    return geometry;
 
 }
 
@@ -844,9 +726,20 @@ class Tween extends Animation {
         this.value = this.easing(this.progress);
         this.delta = this.value - old;
 
-        if (this.values !== null) this.updateFromTo();
+        if (this.values !== null) this.values.forEach(key => {
 
-        if (this.yoyo !== null) this.updateYoyo();
+            this.target[key] = this.from[key] + (this.to[key] - this.from[key]) * this.value;
+
+        });
+
+        if (this.yoyo !== null){
+            if (this.progress > 1 || this.progress < 0) {
+                this.value = this.progress = (this.progress > 1) ? 1 : 0;
+                this.yoyo = !this.yoyo;
+            }
+            this.onUpdate(this);
+        }
+
         else if (this.progress <= 1) this.onUpdate(this);
         else {
 
@@ -860,28 +753,7 @@ class Tween extends Animation {
 
     }
 
-    updateYoyo() {
 
-        if (this.progress > 1 || this.progress < 0) {
-
-            this.value = this.progress = (this.progress > 1) ? 1 : 0;
-            this.yoyo = !this.yoyo;
-
-        }
-
-        this.onUpdate(this);
-
-    }
-
-    updateFromTo() {
-
-        this.values.forEach(key => {
-
-            this.target[key] = this.from[key] + (this.to[key] - this.from[key]) * this.value;
-
-        });
-
-    }
 
     getFromTo(options) {
 
@@ -988,12 +860,9 @@ class Draggable {
             },
 
         };
-
         this.onDragStart = () => { };
         this.onDragMove = () => { };
         this.onDragEnd = () => { };
-
-
         return this;
 
     }
@@ -1626,9 +1495,9 @@ class Timer extends Animation {
         this.startTime = Date.now();
         this.deltaTime = 0;
         this.converted = '0 :00';
-        gsap.to(".performance__screen",{
+        gsap.to(".performance__screen", {
             scaleX: 0,
-            scaleY:1.25,
+            scaleY: 1.25,
             duration: 0.5,
         });
         super.start();
@@ -1649,9 +1518,9 @@ class Timer extends Animation {
         super.stop();
         //Finished
         const performanceText = document.querySelector("performance--text");
-        gsap.to(".performance__screen",{
+        gsap.to(".performance__screen", {
             scaleX: 1,
-            scaleY:1,
+            scaleY: 1,
             duration: 0.5,
         });
         //Add ding sound
@@ -1785,18 +1654,7 @@ class Storage {
             return true;
 
         } catch (e) {
-
-            this.game.cube.size = 3;
-            this.game.controls.flipConfig = 0;
-            this.game.scrambler.dificulty = 1;
-
-            this.game.world.fov = 10;
-            this.game.world.resize();
-
-            this.savePreferences();
-
-            return false;
-
+            this.defaultPreference();
         }
 
     }
@@ -1847,36 +1705,38 @@ class Themes {
 }
 
 class Video extends Animation {
-    constructor(game){
+    // if computer doesnt have webcam,then it get error
+    constructor(game) {
         super(true);
+        this.game = game;
         this.usercam = game.dom.videos.userCam;
         this.camstream = null;
     }
 
-    activate(){
-                navigator.mediaDevices.getUserMedia({video: true})
-                    .then(stream=>{this.usercam.srcObject = stream; this.camstream = stream;})
-                    .catch(err=>{console.log("Error accessing webcam: ", err)});
-                gsap.to(".usercam",{
-                    scaleY:1,
-                    duration:0.35
-                })
+    activate() {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => { this.usercam.srcObject = stream; this.camstream = stream; })
+            .catch(err => { console.log("Error accessing webcam: ", err) });
+        gsap.to(".usercam", {
+            scaleY: 1,
+            duration: 0.35
+        });
     }
 
-    deactivate(){
-                gsap.to(".usercam",{
-                    scaleY:0,
-                    duration:0.35
-                })
-                if(this.camstream){
-                    let tracks = this.camstream.getTracks();
-                    tracks.forEach(track=>track.stop());
-                    //this.usercam.srcObject = null; // commented out for visual purpose
-                }
+    deactivate() {
+        gsap.to(".usercam", {
+            scaleY: 0,
+            duration: 0.35
+        })
+        if (this.camstream) {
+            let tracks = this.camstream.getTracks();
+            tracks.forEach(track => track.stop());
+            //this.usercam.srcObject = null; // commented out for visual purpose
+        }
     }
 
-    update(){
-        
+    update() {
+
     }
 }
 
@@ -1916,80 +1776,80 @@ class Game {
 
 
     initGame() {
-        this.cube.init();
+        this.resetGame()
         this.controls.enable();
         this.controls.onMove = () => this.startTimer();
         this.controls.onSolved = () => this.complete();
     }
 
-    initVisual(){
-        gsap.to(".usercam",{
-            scaleY:0,
-            duration:0
+    initVisual() {
+        gsap.to(".usercam", {
+            scaleY: 0,
+            duration: 0
         })
         setTimeout(() => {
-            gsap.to(".blockinglogo",{
-                scaleY:0,
-                scaleX:2,
-                duration:0.2
+            gsap.to(".blockinglogo", {
+                scaleY: 0,
+                scaleX: 2,
+                duration: 0.2
             })
         }, 1000);
 
-        setTimeout(()=>{
-            gsap.to(".blockinglogo",{
-                left:"200%",
+        setTimeout(() => {
+            gsap.to(".blockinglogo", {
+                left: "200%",
                 duration: 0,
             })
-            gsap.to(".performance__screen",{
+            gsap.to(".performance__screen", {
                 scaleX: 0,
-                scaleY:1.25,
+                scaleY: 1.25,
                 duration: 0,
             });
-            gsap.to(".blockingscreen",{
-                right:"100%",
+            gsap.to(".blockingscreen", {
+                right: "100%",
                 duration: 0.5,
                 ease: "power2.out"
 
             });
-            gsap.to(".blockingscreen2",{
-                left:"100%",
+            gsap.to(".blockingscreen2", {
+                left: "100%",
                 duration: 0.5,
                 ease: "power2.out"
 
             });
 
-        },1500)
+        }, 1500)
 
     }
 
     initButtons() {
         this.dom.buttons.scrambleButton.addEventListener('click', () => this.scrambleAndStart());
         this.dom.buttons.resetButton.addEventListener('click', () => this.resetGame());
-        this.dom.sliders.HandgestureMode.addEventListener('click', ()=> this.handGestureState());
+        this.dom.sliders.HandgestureMode.addEventListener('click', () => this.handGestureState());
     }
 
     handGestureState() {
-            if(this.dom.sliders.HandgestureMode.checked){
-                fetch("/switch_on", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ switch_state: "on" })
-                }).catch(err=>{console.log("POST Error: ", err);});
-                this.video.activate();
-                console.log("Activate");
-            } else{
-                fetch("/switch_off", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ switch_state: "off" })
-                }).catch(err=>{console.log("POST Error: ", err);});
-                this.video.deactivate();
-                console.log("Deactivate");
-            }
+        if (this.dom.sliders.HandgestureMode.checked) {
+            fetch("/switch_on", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ switch_state: "on" })
+            }).catch(err => { console.log("POST Error: ", err); });
+            this.video.activate();
+            console.log("Activate");
+        } else {
+            fetch("/switch_off", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ switch_state: "off" })
+            }).catch(err => { console.log("POST Error: ", err); });
+            this.video.deactivate();
+            console.log("Deactivate");
+        }
     }
 
     scrambleAndStart() {
@@ -1998,7 +1858,7 @@ class Game {
                 scaleX: 0,
                 scaleY: 1.25,
                 duration: 0.5,
-            }); 
+            });
             this.timer.reset();
             this.scrambler.scramble();
             this.controls.scrambleCube();

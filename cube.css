@@ -203,23 +203,26 @@ input:checked + .slider:before {
     gap: 30px;
 }
 
-button {
+.ui__buttons button {
     background-color: #1a1a1a;
+    background-image: linear-gradient(144deg, #40e6a6, #3b2fe0 50%, #4700eb);
+    display: flex;
     cursor: pointer;
-    border-radius: 10px;
+    border: 0;
+    border-radius: 8px;
     transition: background 0.3s;
 }
 
 
-button img {
+.ui__buttonsbutton img {
     height: 100%;
     width: auto;
 }
 
-button:hover {
+.ui__buttonsbutton:hover {
     background-color: #312c2b;
 }
 
-button:active {
+.ui__buttonsbutton:active {
     transform: scale(0.95);
 }
