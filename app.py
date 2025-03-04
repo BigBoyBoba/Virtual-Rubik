@@ -15,7 +15,7 @@ import mediapipe as mp
 import time
 import base64
 
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, send_from_directory, redirect, url_for, request, session
 from flask_socketio import SocketIO
 import threading
 
@@ -24,6 +24,8 @@ from model import KeyPointClassifier
 from model import PointHistoryClassifier
 
 app = Flask(__name__)
+app.secret_key = "145avf!"
+
 socketio = SocketIO(app,cors_allowed_origins="*")
 
 latest_frame = None  # Store the latest frame
@@ -740,9 +742,9 @@ def rotation_decision(handside, gesture):
 
 @app.route('/')
 def main_page():
-    return render_template("cube.html")
+    return render_template("main.html")
 
-@app.route('/switch_on',  methods=['POST'])
+"""@app.route('/switch_on',  methods=['POST'])
 def activateHG():
     print("activate")
     return jsonify({"message": "activation successful"})  # Proper response
@@ -751,8 +753,23 @@ def activateHG():
 @app.route('/switch_off', methods=['POST'])
 def deactivateHG():
     print("deactivate")
-    return jsonify({"message": "deactivation successful"})
+    return jsonify({"message": "deactivation successful"})"""
 
+@app.route('/startGame', methods=["POST"])
+def startGame():
+    data = request.json
+    session["settings"] = data
+    return redirect(url_for("preferenceSet"))
+
+@app.route("/game")
+def preferenceSet():
+    preferences = session.get("settings", {})
+    print(preferences)
+    return render_template('cube.html' ,settings=preferences)
+
+@app.route('/sounds/<filename>')
+def get_audio(filename):
+    return send_from_directory('static/sounds', filename)
 
 @socketio.on("message")
 def handle_frame(data):
@@ -772,6 +789,7 @@ def handle_frame(data):
 @socketio.on('connect')
 def on_connect():
     print("Client connected!")
+
 
 
 if __name__ == '__main__':

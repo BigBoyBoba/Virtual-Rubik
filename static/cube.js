@@ -1,3 +1,13 @@
+const Sounds = [
+    new Audio('./sounds/drag1.wav'),
+    new Audio('./sounds/drag2.wav'),
+    new Audio('./sounds/drag3.wav'),
+    new Audio('./sounds/drag4.wav'),
+    new Audio('./sounds/drag5.wav'),
+
+
+];
+
 const animationEngine = (() => {
     let uniqueID = 0;
 
@@ -245,17 +255,7 @@ function RoundedBoxGeometry(size, radius, radiusSegments) {
 
     function doCorners() {
 
-        var flips = [
-            true,
-            false,
-            true,
-            false,
-            false,
-            true,
-            false,
-            true
-        ];
-
+        const flips = [true, false, true, false, false, true, false, true];
         var lastRowOffset = rs1 * (radiusSegments - 1);
 
         for (var i = 0; i < 8; i++) {
@@ -269,31 +269,16 @@ function RoundedBoxGeometry(size, radius, radiusSegments) {
 
                 for (var u = 0; u < radiusSegments; u++) {
 
-                    var u1 = u + 1;
                     var a = cornerOffset + r1 + u;
-                    var b = cornerOffset + r1 + u1;
+                    var b = a + 1;
                     var c = cornerOffset + r2 + u;
-                    var d = cornerOffset + r2 + u1;
+                    var d = c + 1;
 
-                    if (!flips[i]) {
 
-                        indices.push(a);
-                        indices.push(b);
-                        indices.push(c);
-
-                        indices.push(b);
-                        indices.push(d);
-                        indices.push(c);
-
+                    if (flips[i]) {
+                        indices.push(a, c, b, b, c, d);
                     } else {
-
-                        indices.push(a);
-                        indices.push(c);
-                        indices.push(b);
-
-                        indices.push(b);
-                        indices.push(c);
-                        indices.push(d);
+                        indices.push(a, b, c, b, d, c);
 
                     }
 
@@ -302,25 +287,10 @@ function RoundedBoxGeometry(size, radius, radiusSegments) {
             }
 
             for (var u = 0; u < radiusSegments; u++) {
-
                 var a = cornerOffset + lastRowOffset + u;
-                var b = cornerOffset + lastRowOffset + u + 1;
+                var b = a + 1;
                 var c = cornerOffset + lastVertex;
-
-                if (!flips[i]) {
-
-                    indices.push(a);
-                    indices.push(b);
-                    indices.push(c);
-
-                } else {
-
-                    indices.push(a);
-                    indices.push(c);
-                    indices.push(b);
-
-                }
-
+                indices.push(a, flips[i] ? c : b, flips[i] ? b : c);
             }
 
         }
@@ -334,72 +304,42 @@ function RoundedBoxGeometry(size, radius, radiusSegments) {
         var c = lastVertex + cornerVertNumber * 2;
         var d = lastVertex + cornerVertNumber * 3;
 
-        indices.push(a);
-        indices.push(b);
-        indices.push(c);
-        indices.push(a);
-        indices.push(c);
-        indices.push(d);
+        indices.push(a, b, c, a, c, d);
 
         a = lastVertex + cornerVertNumber * 4;
         b = lastVertex + cornerVertNumber * 5;
         c = lastVertex + cornerVertNumber * 6;
         d = lastVertex + cornerVertNumber * 7;
 
-        indices.push(a);
-        indices.push(c);
-        indices.push(b);
-        indices.push(a);
-        indices.push(d);
-        indices.push(c);
+        indices.push(a, c, b, a, d, c);
 
         a = 0;
         b = cornerVertNumber;
         c = cornerVertNumber * 4;
         d = cornerVertNumber * 5;
 
-        indices.push(a);
-        indices.push(c);
-        indices.push(b);
-        indices.push(b);
-        indices.push(c);
-        indices.push(d);
+        indices.push(a, c, b, b, c, d);
 
         a = cornerVertNumber * 2;
         b = cornerVertNumber * 3;
         c = cornerVertNumber * 6;
         d = cornerVertNumber * 7;
 
-        indices.push(a);
-        indices.push(c);
-        indices.push(b);
-        indices.push(b);
-        indices.push(c);
-        indices.push(d);
+        indices.push(a, c, b, b, c, d);
 
         a = radiusSegments;
         b = radiusSegments + cornerVertNumber * 3;
         c = radiusSegments + cornerVertNumber * 4;
         d = radiusSegments + cornerVertNumber * 7;
 
-        indices.push(a);
-        indices.push(b);
-        indices.push(c);
-        indices.push(b);
-        indices.push(d);
-        indices.push(c);
+        indices.push(a, b, c, b, d, c);
 
         a = radiusSegments + cornerVertNumber;
         b = radiusSegments + cornerVertNumber * 2;
         c = radiusSegments + cornerVertNumber * 5;
         d = radiusSegments + cornerVertNumber * 6;
 
-        indices.push(a);
-        indices.push(c);
-        indices.push(b);
-        indices.push(b);
-        indices.push(c);
-        indices.push(d);
+        indices.push(a, c, b, b, c, d);
 
     }
 
@@ -413,29 +353,16 @@ function RoundedBoxGeometry(size, radius, radiusSegments) {
 
             for (var u = 0; u < radiusSegments; u++) {
 
-                var u1 = u + 1;
                 var a = cOffset + u;
-                var b = cOffset + u1;
+                var b = a + 1;
                 var c = cRowOffset + u;
-                var d = cRowOffset + u1;
+                var d = c + 1;
 
-                if (!needsFlip) {
-
-                    indices.push(a);
-                    indices.push(b);
-                    indices.push(c);
-                    indices.push(b);
-                    indices.push(d);
-                    indices.push(c);
+                if (needsFlip) {
+                    indices.push(a, c, b, b, c, d);
 
                 } else {
-
-                    indices.push(a);
-                    indices.push(c);
-                    indices.push(b);
-                    indices.push(b);
-                    indices.push(c);
-                    indices.push(d);
+                    indices.push(a, b, c, b, d, c);
 
                 }
 
@@ -447,50 +374,31 @@ function RoundedBoxGeometry(size, radius, radiusSegments) {
 
     function doDepthEdges() {
 
-        var cStarts = [0, 2, 4, 6];
-        var cEnds = [1, 3, 5, 7];
+        var pairs = [[0, 1], [2, 3], [4, 5], [6, 7]];
 
-        for (var i = 0; i < 4; i++) {
+        pairs.forEach(([start, end], i) => {
+            var cStart = cornerVertNumber * start;
+            var cEnd = cornerVertNumber * end;
 
-            var cStart = cornerVertNumber * cStarts[i];
-            var cEnd = cornerVertNumber * cEnds[i];
-
-            var needsFlip = 1 >= i;
+            var needsFlip = i < 2;
 
             for (var u = 0; u < radiusSegments; u++) {
 
                 var urs1 = u * rs1;
-                var u1rs1 = (u + 1) * rs1;
 
                 var a = cStart + urs1;
-                var b = cStart + u1rs1;
+                var b = a + rs1;
                 var c = cEnd + urs1;
-                var d = cEnd + u1rs1;
+                var d = c + rs1;
 
                 if (needsFlip) {
-
-                    indices.push(a);
-                    indices.push(c);
-                    indices.push(b);
-                    indices.push(b);
-                    indices.push(c);
-                    indices.push(d);
+                    indices.push(a, c, b, b, c, d);
 
                 } else {
-
-                    indices.push(a);
-                    indices.push(b);
-                    indices.push(c);
-                    indices.push(b);
-                    indices.push(d);
-                    indices.push(c);
-
+                    indices.push(a, b, c, b, d, c);
                 }
-
             }
-
-        }
-
+        });
     }
 
     function doWidthEdges() {
@@ -514,23 +422,11 @@ function RoundedBoxGeometry(size, radius, radiusSegments) {
                 var c = cEnd + radiusSegments + u * rs1;
                 var d = cEnd + (u != end ? radiusSegments + (u + 1) * rs1 : cornerVertNumber - 1);
 
-                if (!needsFlip[i]) {
-
-                    indices.push(a);
-                    indices.push(b);
-                    indices.push(c);
-                    indices.push(b);
-                    indices.push(d);
-                    indices.push(c);
+                if (needsFlip[i]) {
+                    indices.push(a, c, b, b, c, d);
 
                 } else {
-
-                    indices.push(a);
-                    indices.push(c);
-                    indices.push(b);
-                    indices.push(b);
-                    indices.push(c);
-                    indices.push(d);
+                    indices.push(a, b, c, b, d, c);
 
                 }
 
@@ -573,30 +469,26 @@ RoundedBoxGeometry.constructor = RoundedBoxGeometry;
 
 function RoundedPlaneGeometry(size, radius, depth) {
 
-    var x, y, width, height;
+    var half, width, height;
 
-    x = y = - size / 2;
+    half = - size / 2;
     width = height = size;
     radius = size * radius;
 
     const shape = new THREE.Shape();
 
-    shape.moveTo(x, y + radius);
-    shape.lineTo(x, y + height - radius);
-    shape.quadraticCurveTo(x, y + height, x + radius, y + height);
-    shape.lineTo(x + width - radius, y + height);
-    shape.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
-    shape.lineTo(x + width, y + radius);
-    shape.quadraticCurveTo(x + width, y, x + width - radius, y);
-    shape.lineTo(x + radius, y);
-    shape.quadraticCurveTo(x, y, x, y + radius);
+    shape.moveTo(half, half + radius);
+    shape.lineTo(half, half + height - radius);
+    shape.quadraticCurveTo(half, half + height, half + radius, half + height);
+    shape.lineTo(half + width - radius, half + height);
+    shape.quadraticCurveTo(half + width, half + height, half + width, half + height - radius);
+    shape.lineTo(half + width, half + radius);
+    shape.quadraticCurveTo(half + width, half, half + width - radius, half);
+    shape.lineTo(half + radius, half);
+    shape.quadraticCurveTo(half, half, half, half + radius);
 
-    const geometry = new THREE.ExtrudeBufferGeometry(
-        shape,
-        { depth: depth, bevelEnabled: false, curveSegments: 3 }
-    );
+    return new THREE.ExtrudeBufferGeometry(shape, { depth, bevelEnabled: false, curveSegments: 3 });
 
-    return geometry;
 
 }
 
@@ -819,7 +711,6 @@ class Tween extends Animation {
         this.onComplete = options.onComplete || (() => { });
 
         this.delay = options.delay || false;
-        this.yoyo = options.yoyo ? false : null;
 
         this.progress = 0;
         this.value = 0;
@@ -837,17 +728,22 @@ class Tween extends Animation {
     update(delta) {
 
         const old = this.value * 1;
-        const direction = (this.yoyo === true) ? - 1 : 1;
+        const direction = 1;
 
         this.progress += (delta / this.duration) * direction;
 
         this.value = this.easing(this.progress);
         this.delta = this.value - old;
 
-        if (this.values !== null) this.updateFromTo();
+        if (this.values !== null) this.values.forEach(key => {
 
-        if (this.yoyo !== null) this.updateYoyo();
-        else if (this.progress <= 1) this.onUpdate(this);
+            this.target[key] = this.from[key] + (this.to[key] - this.from[key]) * this.value;
+
+        });
+
+
+
+        if (this.progress <= 1) this.onUpdate(this);
         else {
 
             this.progress = 1;
@@ -860,28 +756,7 @@ class Tween extends Animation {
 
     }
 
-    updateYoyo() {
 
-        if (this.progress > 1 || this.progress < 0) {
-
-            this.value = this.progress = (this.progress > 1) ? 1 : 0;
-            this.yoyo = !this.yoyo;
-
-        }
-
-        this.onUpdate(this);
-
-    }
-
-    updateFromTo() {
-
-        this.values.forEach(key => {
-
-            this.target[key] = this.from[key] + (this.to[key] - this.from[key]) * this.value;
-
-        });
-
-    }
 
     getFromTo(options) {
 
@@ -988,12 +863,9 @@ class Draggable {
             },
 
         };
-
         this.onDragStart = () => { };
         this.onDragMove = () => { };
         this.onDragEnd = () => { };
-
-
         return this;
 
     }
@@ -1043,8 +915,8 @@ class Controls {
 
         this.flipConfig = 0;
 
-        this.flipEasings = [Easing.Power.Out(3), Easing.Sine.Out(), Easing.Back.Out(1.5)];
-        this.flipSpeeds = [125, 200, 300];
+        this.flipEasings = [Easing.Power.Out(3), Easing.Sine.Out()];
+        this.flipSpeeds = [125, 200];
 
         this.raycaster = new THREE.Raycaster();
 
@@ -1076,6 +948,8 @@ class Controls {
 
         this.scramble = null;
         this.state = STILL;
+
+        this.lastSoundTime = 0;
 
         this.initDraggable();
 
@@ -1145,6 +1019,12 @@ class Controls {
 
             if (this.scramble !== null) return;
             if (this.state === STILL || (this.state === ANIMATING && this.gettingDrag === false)) return;
+
+            const now = Date.now();
+            if (now - this.lastSoundTime > 150) {  // Avoid too frequent sounds
+                this.playRandomDragSound();
+                this.lastSoundTime = now;
+            }
 
             const planeIntersect = this.getIntersect(position.current, this.helper, false);
             if (planeIntersect === false) return;
@@ -1262,7 +1142,6 @@ class Controls {
 
         const easing = this.flipEasings[config];
         const duration = this.flipSpeeds[config];
-        const bounce = (config == 2) ? this.bounceCube() : (() => { });
 
         this.rotationTween = new Tween({
             easing: easing,
@@ -1271,7 +1150,6 @@ class Controls {
 
                 let deltaAngle = tween.delta * rotation;
                 this.group.rotateOnAxis(this.flipAxis, deltaAngle);
-                bounce(tween.value, deltaAngle, rotation);
 
             },
             onComplete: () => {
@@ -1291,34 +1169,12 @@ class Controls {
 
     }
 
-    bounceCube() {
-
-        let fixDelta = true;
-
-        return (progress, delta, rotation) => {
-
-            if (progress >= 1) {
-
-                if (fixDelta) {
-
-                    delta = (progress - 1) * rotation;
-                    fixDelta = false;
-
-                }
-
-                this.game.cube.object.rotateOnAxis(this.flipAxis, delta);
-
-            }
-
-        }
-
-    }
 
     rotateCube(rotation, callback) {
 
         const config = this.flipConfig;
-        const easing = [Easing.Power.Out(4), Easing.Sine.Out(), Easing.Back.Out(2)][config];
-        const duration = [100, 150, 350][config];
+        const easing = [Easing.Power.Out(4), Easing.Sine.Out()][config];
+        const duration = [100, 150][config];
 
         this.rotationTween = new Tween({
             easing: easing,
@@ -1535,6 +1391,11 @@ class Controls {
 
     }
 
+    playRandomDragSound() {
+        const sound = Sounds[Math.floor(Math.random() * Sounds.length)];
+        sound.currentTime = 0;  // Reset sound if played before
+        sound.play();
+    }
 }
 
 class Scrambler {
@@ -1550,7 +1411,6 @@ class Scrambler {
         };
         this.moves = [];
         this.conveted = [];
-        this.pring = '';
     }
 
     scramble() {
@@ -1609,6 +1469,7 @@ class Scrambler {
         return { position, axis, angle, name: move };
 
     }
+
 }
 
 
@@ -1625,9 +1486,9 @@ class Timer extends Animation {
         this.startTime = Date.now();
         this.deltaTime = 0;
         this.converted = '0 :00';
-        gsap.to(".performance__screen",{
+        gsap.to(".performance__screen", {
             scaleX: 0,
-            scaleY:1.25,
+            scaleY: 1.25,
             duration: 0.5,
         });
         super.start();
@@ -1644,18 +1505,26 @@ class Timer extends Animation {
     stop() {
         this.currentTime = Date.now();
         this.deltaTime = this.currentTime - this.startTime;
-        this.convert();
+        this.convert(this.deltaTime);
         super.stop();
         //Finished
-        const performanceText = document.querySelector("performance--text");
-        gsap.to(".performance__screen",{
+        gsap.to(".performance__screen", {
             scaleX: 1,
-            scaleY:1,
+            scaleY: 1,
             duration: 0.5,
         });
         //Add ding sound
         //Performance screen popup(Best time, personal record etc.)
         //Add confetti effect???
+
+        this.game.finishedtime_raw = this.deltaTime;
+        if (this.game.besttime_raw == 0 || this.game.besttime_raw > this.deltaTime) {
+            this.game.besttime_raw = this.deltaTime;
+            this.game.dom.texts.besttime.innerHTML = "Best time: " + this.converted;
+        }
+        this.game.dom.texts.finishedtime.innerHTML = "Finished time: " + this.converted;
+
+
         this.converted = "SOLVED";
         this.setText();
     }
@@ -1664,18 +1533,17 @@ class Timer extends Animation {
         const old = this.converted;
         this.currentTime = Date.now();
         this.deltaTime = this.currentTime - this.startTime;
-        this.convert();
+        this.convert(this.deltaTime);
 
         if (this.converted != old) {
-            localStorage.setItem('theCube_time', this.deltaTime);
             this.setText();
         }
 
     }
 
-    convert() {
-        const seconds = parseInt((this.deltaTime / 1000) % 60);
-        const minutes = parseInt((this.deltaTime / (1000 * 60)));
+    convert(deltaTime) {
+        const seconds = parseInt((deltaTime / 1000) % 60);
+        const minutes = parseInt((deltaTime / (1000 * 60)));
         this.converted = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
     }
 
@@ -1685,72 +1553,7 @@ class Timer extends Animation {
 
 }
 
-class Preferences {
-
-    constructor(game) {
-        this.game = game;
-    }
-
-    init() {
-        this.ranges = {
-
-            size: new Range('size', {
-                value: this.game.cube.size,
-                range: [2, 5],
-                step: 1,
-                onUpdate: value => {
-
-                    this.game.cube.size = value;
-
-                    this.game.preferences.ranges.scramble.list.forEach((item, i) => {
-
-                        item.innerHTML = this.game.scrambler.scrambleLength[this.game.cube.size][i];
-
-                    });
-
-                },
-                onComplete: () => this.game.storage.savePreferences(),
-            }),
-
-            flip: new Range('flip', {
-                value: this.game.controls.flipConfig,
-                range: [0, 2],
-                step: 1,
-                onUpdate: value => {
-
-                    this.game.controls.flipConfig = value;
-
-                },
-                onComplete: () => this.game.storage.savePreferences(),
-            }),
-
-            scramble: new Range('scramble', {
-                value: this.game.scrambler.dificulty,
-                range: [0, 2],
-                step: 1,
-                onUpdate: value => {
-
-                    this.game.scrambler.dificulty = value;
-
-                },
-                onComplete: () => this.game.storage.savePreferences()
-            }),
-
-            fov: new Range('fov', {
-                value: this.game.world.fov,
-                range: [2, 45],
-                onUpdate: value => {
-
-                    this.game.world.fov = value;
-                    this.game.world.resize();
-
-                },
-                onComplete: () => this.game.storage.savePreferences()
-            })
-        };
-    }
-
-}
+//this.game.controls.flipConfig, this.game.scrambler.dificulty
 
 class Storage {
 
@@ -1765,43 +1568,33 @@ class Storage {
     }
 
     loadPreferences() {
-
         try {
 
             const preferences = JSON.parse(localStorage.getItem('theCube_preferences'));
 
+            console.log(gameSettings.colors)
             if (!preferences) throw new Error();
 
-            this.game.cube.size = parseInt(preferences.cubeSize);
+            this.game.cube.size = parseInt(gameSettings.SbyS);
             this.game.controls.flipConfig = parseInt(preferences.flipConfig);
             this.game.scrambler.dificulty = parseInt(preferences.dificulty);
 
             this.game.world.fov = parseFloat(preferences.fov);
             this.game.world.resize();
 
-            this.game.themes.colors = preferences.colors;
+            this.game.themes.colors = gameSettings.colors;
 
             return true;
 
         } catch (e) {
-
-            this.game.cube.size = 3;
-            this.game.controls.flipConfig = 0;
-            this.game.scrambler.dificulty = 1;
-
-            this.game.world.fov = 10;
-            this.game.world.resize();
-
-            this.savePreferences();
-
-            return false;
-
+            console.log(e)
+            this.defaultPreference();
         }
 
     }
 
     defaultPreference() {
-        this.game.cube.size = 3;
+        this.game.cube.size = 2;
         this.game.controls.flipConfig = 1;
         this.game.scrambler.dificulty;
         this.game.world.fov;
@@ -1845,6 +1638,9 @@ class Themes {
     }
 }
 
+dataQueue = [];
+isProcessing = false;
+
 class Video extends Animation {
     constructor(game){
         super(true);
@@ -1855,6 +1651,10 @@ class Video extends Animation {
         this.canvas = document.createElement("canvas");
         this.ctx = this.canvas.getContext("2d");
         this.controls = game.controls;
+
+        this.processInterval = 50;
+
+
     }
 
     activate(){
@@ -1907,8 +1707,6 @@ class Video extends Animation {
             }
         }
     }
-
-
     commandCube(data){
         console.log(data.command);
         let command = null
@@ -1955,15 +1753,36 @@ class Video extends Animation {
         this.controls.flipAxis[move.axis] = 1;
         this.controls.selectLayer(layer);
         this.controls.rotateLayer(move.angle, true, () => {});
+        this.controls.onMove();
 
     }
+
+
+    processNext() {
+        if (dataQueue.length == 0) {
+            isProcessing = false; // Stop if queue is empty
+            this.controls.checkIsSolved();
+            return;
+        }
+        isProcessing = true; // Mark processing as active
+        const data = dataQueue.shift(); // Take the first item
+        this.commandCube(data); // Handle the data
+
+        // Schedule the next processing only if there's more data
+        setTimeout(() => this.processNext(), this.processInterval);
+
+    }
+
 
 
     initSocketListen(){
-        this.socket.on("command_back", (data) => {this.commandCube(data)})
+        this.socket.on("command_back", (data) => {
+            dataQueue.push(data);
+            if (!isProcessing) {
+                this.processNext(); // Start processing if idle
+            }
+        })
     }
-
-
 }
 
 class Game {
@@ -1971,7 +1790,9 @@ class Game {
         this.dom = {
             game: document.querySelector('.game'),
             texts: {
-                timer: document.querySelector('.text--timer')
+                timer: document.querySelector('.text--timer'),
+                besttime: document.querySelector('#text--best'),
+                finishedtime: document.querySelector('#text--finished')
             },
             buttons: {
                 scrambleButton: document.querySelector('#scrambleButton'),
@@ -1985,6 +1806,8 @@ class Game {
             }
         };
 
+        this.newGame = true;
+
 
         this.world = new World(this);
         this.cube = new Cube(this);
@@ -1994,89 +1817,98 @@ class Game {
         this.themes = new Themes(this);
         this.storage = new Storage(this);
         this.video = new Video(this);
-        this.storage.init()
+        this.storage.init();
         this.initGame();
         this.initButtons();
         this.initVisual();
+
+        this.victory_sound = new Audio("./sounds/victory.mp3");
+        this.play_song = new Audio("./sounds/CubeLab_song.mp3");
+        this.play_song.loop = true;
+
+
+        this.besttime_raw = 0;
+        this.finishedtime_raw = 0;
+
     }
 
 
 
     initGame() {
-        this.cube.init();
+        this.resetGame();
         this.controls.enable();
         this.controls.onMove = () => this.startTimer();
         this.controls.onSolved = () => this.complete();
     }
 
-    initVisual(){
-        gsap.to(".usercam",{
-            scaleY:0,
-            duration:0
+    initVisual() {
+        gsap.to(".usercam", {
+            scaleY: 0,
+            duration: 0
         })
         setTimeout(() => {
-            gsap.to(".blockinglogo",{
-                scaleY:0,
-                scaleX:2,
-                duration:0.2
+            gsap.to(".blockinglogo", {
+                scaleY: 0,
+                scaleX: 2,
+                duration: 0.2
             })
         }, 1000);
 
-        setTimeout(()=>{
-            gsap.to(".blockinglogo",{
-                left:"200%",
+        setTimeout(() => {
+            gsap.to(".blockinglogo", {
+                left: "200%",
                 duration: 0,
             })
-            gsap.to(".performance__screen",{
+            gsap.to(".performance__screen", {
                 scaleX: 0,
-                scaleY:1.25,
+                scaleY: 1.25,
                 duration: 0,
             });
-            gsap.to(".blockingscreen",{
-                right:"100%",
+            gsap.to(".blockingscreen", {
+                right: "100%",
                 duration: 0.5,
                 ease: "power2.out"
 
             });
-            gsap.to(".blockingscreen2",{
-                left:"100%",
+            gsap.to(".blockingscreen2", {
+                left: "100%",
                 duration: 0.5,
                 ease: "power2.out"
 
             });
 
-        },1500)
+        }, 1500)
 
     }
 
     initButtons() {
         this.dom.buttons.scrambleButton.addEventListener('click', () => this.scrambleAndStart());
         this.dom.buttons.resetButton.addEventListener('click', () => this.resetGame());
-        this.dom.sliders.HandgestureMode.addEventListener('click', ()=> this.handGestureState());
+        this.dom.sliders.HandgestureMode.addEventListener('click', () => this.handGestureState());
     }
 
     handGestureState() {
-            if(this.dom.sliders.HandgestureMode.checked){
-                fetch("/switch_on", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ switch_state: "on" })
-                }).catch(err=>{console.log("POST Error: ", err);});
-                this.video.activate();
-                console.log("Activate");
-            } else{
-                fetch("/switch_off", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ switch_state: "off" })
-                }).catch(err=>{console.log("POST Error: ", err);});
-                this.video.deactivate();
-                console.log("Deactivate");
-            }
+        if (this.dom.sliders.HandgestureMode.checked) {
+            /*fetch("/switch_on", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ switch_state: "on" })
+            }).catch(err => { console.log("POST Error: ", err); });*/
+            this.video.activate();
+            //console.log("Activate");
+        } else {
+            /*fetch("/switch_off", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ switch_state: "off" })
+            }).catch(err => { console.log("POST Error: ", err); });*/
+            this.video.deactivate();
+            //console.log("Deactivate");
+        }
     }
 
     scrambleAndStart() {
@@ -2085,7 +1917,11 @@ class Game {
                 scaleX: 0,
                 scaleY: 1.25,
                 duration: 0.5,
-            }); 
+            });
+            if (!this.newGame) {
+                this.victory_sound.pause();
+                this.play_song.pause();
+            }
             this.timer.reset();
             this.scrambler.scramble();
             this.controls.scrambleCube();
@@ -2097,15 +1933,22 @@ class Game {
         if (this.newGame) {
             this.timer.start();
             this.newGame = false;
+            this.play_song.play();
         }
     }
 
     complete() {
+        this.play_song.pause();
+        this.victory_sound.play();
         this.timer.stop();
     }
 
     resetGame() {
         if (this.controls.scramble == null) {
+            if (!this.newGame) {
+                this.victory_sound.pause();
+                this.play_song.pause();
+            }
             this.cube.init();
             this.timer.reset();
             this.newGame = true;

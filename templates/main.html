@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Menu</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
+  integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" 
+  referrerpolicy="no-referrer" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}"/>
+</head>
+<body>
+
+
+  <script src="{{ url_for('static', filename='main.js') }}"></script>
+  <audio id="hover_b" src="{{ url_for('static', filename='sounds/scrollMenu.ogg') }}"></audio>
+
+
+  <!-- Full-screen logo -->
+  <div id="fullScreenLogo" class="full-screen-logo">
+    <img src="{{ url_for('static', filename='Asset/rubik_boss_3x3.png') }}" alt="Full-screen Logo"/>
+  </div>
+
+    <div class="video-container">
+      <video autoplay loop muted playsinline>
+          <source src="{{ url_for('static', filename='Asset/Background2.mp4') }}" type="video/mp4">
+      </video>
+  </div>
+  </div>
+    <div class="menu">
+      <div class="logo">
+        <img src="{{ url_for('static', filename='Asset/LOGO.png') }}" alt="LOGO" />
+      </div>
+      <div class="left-buttons">
+        <h1>PLAY</h1>
+        <button onclick="startGame(2)">2x2</button>
+        <button onclick="startGame(3)">3x3</button>
+
+        
+      </div>
+      <div class="bottom-buttons">
+        <button onmouseover="document.getElementById('hover_b').play()" onclick="toggleStartMenu('Settings')"><i class="fa-solid fa-gear"></i>  Setting</button>
+        <button onmouseover="document.getElementById('hover_b').play()" onclick="toggleStartMenu('popupcolor')"><i class="fa-solid fa-palette"></i>  Rubik's Color</button>
+        <button onmouseover="document.getElementById('hover_b').play()" onclick="toggleStartMenu('Tutorial')"><i class="fa-solid fa-book-open"></i>  Tutorial</button>
+        <button onmouseover="document.getElementById('hover_b').play()" onclick="toggleStartMenu('Credit')"><i class="fa-solid fa-copyright"></i>  Credit</button>
+        <button onmouseover="document.getElementById('hover_b').play()" onclick="toggleStartMenu('Aboutus')"><i class="fa-solid fa-users"></i>  About us</button>    
+      </div>
+      
+    </div>
+    
+
+  <!-- Settings Popup -->
+  <div class="popup" id="Settings">
+    <ul>
+      <li>
+        <i class="fa-solid fa-globe"></i> Language
+        <select id="languageSelect" onchange="updateLanguage()">
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+          <option value="fr">French</option>
+          <option value="ja">Japanese</option>
+          <option value="th">Thai</option>
+          <option value="zh">Chinese</option>
+          <option value="ru">Russian</option>
+          <option value="de">German</option>
+          <option value="pt">Portuguese</option>
+          <option value="pt">Russian</option>
+        </select>
+      </li>
+      <li>
+        Volume (Sound)
+        <input type="range" min="0" max="100" value="100" class="slider" id="volumeSlider" />
+      </li>
+      <li>
+        Rubrik Size
+        <input type="range" min="50" max="150" value="100" class="slider" id="RubrikSlider" />
+      </li>
+      <li>
+        Resolution
+        <input type="range" min="0" max="100" value="50" class="slider" id="resolutionSlider" />
+      </li>
+      <li>
+        Brightness
+        <input type="range" min="0" max="100" value="50" class="slider" id="brightnessSlider" />
+      </li>
+      <li>
+        Rotation Speed
+        <input type="range" min="0" max="100" value="50" class="slider" id="rotationSpeedSlider" />
+      </li>
+      
+      <li>
+        <button onclick="resetSettings()">Reset</button>
+      </li>    
+      <!-- Back Button -->
+      <button onclick="hideScreen('Settings')">Back</button>
+    </ul>
+  </div>
+
+  <!-- Rubrik's Color Settings Popup -->
+  <div class="popup" id="popupcolor">
+    <h1>Rubrik's Color</h1>
+    <ul>
+      <li>
+        <label for="F">Front Side</label>
+        <input type="color" id="F" onchange="updateColor('F')">
+      </li>
+      <li>
+        <label for="B">Back Side</label>
+        <input type="color" id="B" onchange="updateColor('B')">
+      </li>
+      <li>
+        <label for="L">Left Side</label>
+        <input type="color" id="L" onchange="updateColor('L')">
+      </li>
+      <li>
+        <label for="R">Right Side</label>
+        <input type="color" id="R" onchange="updateColor('R')">
+      </li>
+      <li>
+        <label for="U">Top Side</label>
+        <input type="color" id="U" onchange="updateColor('U')">
+      </li>
+      <li>
+        <label for="D">Bottom Side</label>
+        <input type="color" id="D" onchange="updateColor('D')">
+      </li>
+    </ul>
+    <button onclick="hideScreen('popupcolor')">Back</button>
+  </div>
+
+  <!-- Credits Popup -->
+  <div class="popupcredit" id="Credit" style="text-align: left; padding-left: 20px;">
+    <h1>Our Developers</h1>
+    <p><strong>ID10: Nine</strong></p>
+    <p><strong>ID15: Dew</strong></p>
+    <p><strong>ID16: Faris</strong></p>
+    <p><strong>ID18: Bike</strong></p>
+    <p><strong>ID34: Hearth</strong></p>
+    <p>Copyright (c) 2025 Dew Pitipat</p>
+    <p>Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+  </p>
+    <button onclick="hideScreen('Credit')">Back</button>
+  </div>
+
+
+  <div class="popuptutorial" id="Tutorial">
+    <h1>How to Play:</h1>
+    
+    <p><strong>Select Your Mode:</strong><br />
+      Choose between a 2x2 or 3x3 Rubik's Cube to start.
+    </p>
+    
+    <p><strong>Controls:</strong><br />
+      Mouse/Touch: Click and drag a face to rotate.<br />
+      Keyboard: Use arrow keys or designated keys.<br />
+      Hand Gesture: Use webcam to control the cube.
+    </p>
+
+    <p><strong>Timing & Moves:</strong><br />
+      Solve the cube as fast as possible while tracking your moves for a high score.
+    </p>
+
+    <p><strong>Menu Buttons:</strong><br />
+      <strong>Settings:</strong> Adjust volume, language, resolution, brightness, and speed.<br />
+      <strong>Rubik's Color:</strong> Customize cube colors.<br />
+      <strong>Stats:</strong> View your total solves, best time, and average time.<br />
+      <strong>Credits:</strong> See developer and contributor info.<br />
+      <strong>About Us:</strong> Learn about the creators.<br />
+    </p>
+
+    <p><strong>Additional Features:</strong><br />
+      Reset your settings anytime using the Reset button.
+    </p>
+
+    <button onclick="hideScreen('Tutorial')">Back</button>
+  </div>
+
+
+  <!-- About us -->
+  <div class="popuptutorial" id="Aboutus"> <h1>About Us</h1>
+    <p><strong><i class="fa-brands fa-facebook"></i> Facebook:</strong> RubrikPigachu</p>
+    <p><strong><i class="fa-brands fa-instagram"></i> Instagram:</strong> RubrikDoraemon</p>
+    <p><strong><i class="fa-brands fa-tiktok"></i> TikTok:</strong> RubrikSpeed!</p>
+    <p><strong><i class="fa-solid fa-phone"></i> Tel:</strong> 0938638510</p>
+    <p><strong><i class="fa-solid fa-fax"></i></i> Fax:</strong> 038-758-427</p></p> 
+    <p><strong><i class="fa-solid fa-location-dot"></i> Address:</strong> 223 M.1 Nong-mai-dang, Muang, Chonburi 20000</p>
+    <button onclick="hideScreen('Aboutus')">Back</button>
+  </div>
+</body>
+</html>

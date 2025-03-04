@@ -112,7 +112,7 @@ input:checked + .slider:before {
     position: absolute;
     top: 10vh;
     left: 10vh;
-    height: 50vh;
+    height: 30vh;
     width: 60vh;
     background-color: #1a1a1a;
 }
@@ -120,7 +120,7 @@ input:checked + .slider:before {
     position: absolute;
     height: 8vh;
     width: 60vh;
-    background-color: #606060; 
+    background-color: #606060;
 }
 .performance--text{
     font-family: 'Seven Segment', sans-serif;
@@ -132,31 +132,36 @@ input:checked + .slider:before {
     color: white;
 }
 
-.performance--info pre{
+.performance--info {
     font-family: 'Seven Segment', sans-serif;
-    position: absolute;
-    left: 1vh;
-    top: 5vh;
     font-size: 5vh;
     font-weight: bold;
     color: white;
+    position: absolute;
+    left: 5vh;
+    top: 10vh;
+
+}
+
+#text--best{
+    margin-top: 5vh;
 }
 
 .blockinglogo{
     position: absolute;
     z-index: 3;
-    right: 50%; 
+    right: 50%;
     top: 50%;
 }
 
 .blockinglogo img{
     position: absolute;
     z-index: 3;
-    
+
     align-items: center;
     height: 50vh;
-    width: auto; 
-    transform: translate(-50%,-50%);   
+    width: auto;
+    transform: translate(-50%,-50%);
 }
 
 .blockingscreen{
@@ -164,7 +169,7 @@ input:checked + .slider:before {
     z-index: 2;
     height: 100%;
     width: 50%;
-    background-color: #000000; 
+    background-color: #000000;
 }
 
 .blockingScreendetails{
@@ -172,7 +177,7 @@ input:checked + .slider:before {
     z-index: 2;
     height: 100%;
     width: 1%;
-    background-color: #3e3e3e; 
+    background-color: #3e3e3e;
 }
 .blockingscreen2{
     position: absolute;
@@ -180,7 +185,7 @@ input:checked + .slider:before {
     left:50%;
     height: 100%;
     width: 50%;
-    background-color: #000000; 
+    background-color: #000000;
 }
 
 .usercam{
@@ -203,23 +208,26 @@ input:checked + .slider:before {
     gap: 30px;
 }
 
-button {
+.ui__buttons button {
     background-color: #1a1a1a;
+    background-image: linear-gradient(144deg, #40e6a6, #3b2fe0 50%, #4700eb);
+    display: flex;
     cursor: pointer;
-    border-radius: 10px;
+    border: 0;
+    border-radius: 8px;
     transition: background 0.3s;
 }
 
 
-button img {
+.ui__buttons button img {
     height: 100%;
     width: auto;
 }
 
-button:hover {
+.ui__buttons button:hover {
     background-color: #312c2b;
 }
 
-button:active {
+.ui__buttons button:active {
     transform: scale(0.95);
 }
