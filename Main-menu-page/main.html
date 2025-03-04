@@ -4,314 +4,33 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Game Menu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      width: 100%;
-      margin: 0;
-      font-family: 'Roboto', sans-serif;
-      background: rgb(0, 0, 0);
-      color: rgb(255, 255, 255);
-      display: flex;
-    }
-    
-    .menu {
-      width: 30%;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
-      padding: 20px;
-      position: relative;
-      height: 100vh;
-      margin-left: 10px;
-        white-space: nowrap; /* Make sure buttons stay in one line */
-    }
-    
-    .menu .logo img {
-      position: Auto;
-      width: 80%;
-    }
-    
-    .menu .left-buttons {
-      display: flex;
-      flex-direction: column;
-      margin-top: 20px;
-      margin-left: 0px;
-    }
-    
-    .menu .left-buttons button {
-      font-size: 30px;
-      font-weight: 700;
-      padding: 15px;
-      background: none;
-      border: 2px solid transparent;
-      color: white;
-      cursor: pointer;
-      margin-bottom: 20px;
-      transition: all 0.3s ease;
-      border-radius: 5px;
-      left: 0px;
-    }
-    
-    .menu .left-buttons button:hover {
-      background: lightgray;
-      color: black;
-      border-color: #333;
-    }
-    
-    .menu .bottom-buttons {
-      position: absolute;
-      bottom: 0;
-      display: flex;
-      gap: 50px;
-      justify-content: center;
-      padding: 0px;
-    }
-    
-    
-    .menu .bottom-buttons button {
-      padding: 28px;
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-size: 24px;
-      transition: transform 0.2s, background-color 0.2s ease-in-out;
-      border-radius: 5px;
-    }
-    
-    .menu .bottom-buttons button:hover {
-      transform: scale(1.1,1.1);
-      background-color: lightgray;
-      color: black;
-    }
-    
-    .right-buttons {
-      position: fixed;
-      top: 50%;
-      right: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      transform: translateY(-50%);
-    }
-    
-    .right-buttons button {
-      padding: 20px;
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-size: 24px;
-      transition: transform 0.2s, background-color 0.2s ease-in-out;
-      border-radius: 5px;
-    }
-    
-    .right-buttons button:hover {
-      transform: scale(1.1);
-      background-color: lightgray;
-      color: black;
-    }
-    
-    .popup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 300px;
-      background: #2a2a2a;
-      color: white;
-      border-radius: 5px;
-      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
-      padding: 10px;
-      text-align: center;
-    }
-    .popuptutorial {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 500px; 
-        background: #2a2a2a;
-        color: white;
-        border-radius: 5px;
-        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
-        padding: 20px;
-        text-align: left;
-        overflow-y: auto;
-    }
-    .popupcolor {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 500px;
-        background: #2a2a2a;
-        color: white;
-        border-radius: 5px;
-        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
-        padding: 20px;
-        text-align: left;   
-    }
-    .popup ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    
-    .popup li {
-      padding: 10px;
-      border-bottom: 1px solid #444;
-      cursor: pointer;
-    }
-    
-    .popup li:hover {
-      background: #505050;
-    }
-    
-    .blank-screen {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: black;
-      justify-content: flex-start;
-      align-items: flex-start;
-    }
-    
-    .exit-button {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: none;
-      color: white;
-      padding: 10px 15px;
-      border: none;
-      cursor: pointer;
-      font-size: 24px;
-      transition: transform 0.3s;
-      border-radius: 5px;
-    }
-    
-    .exit-button:hover {
-      transform: scale(1.1);
-      background-color: lightgray;
-      color: black;
-    }
-    
-    .setting-button {
-      background: none;
-      color: white;
-      padding: 10px;
-      border: none;
-      cursor: pointer;
-      font-size: 24px;
-      transition: transform 0.5s, rotate 0.3s ease;
-      border-radius: 5px;
-    }
-    
-    .setting-button:hover {
-      transform: scale(1.1) rotate(180deg);
-      background-color: lightgray;
-      color: black;
-    }
-    
-    .language-buttons {
-      position: fixed;
-      bottom: 30px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      width: 100%;
-    }
-    
-    .language-buttons button {
-      background-color: transparent;
-      color: white;
-      border: 2px solid transparent;
-      padding: 10px 15px;
-      cursor: pointer;
-      font-size: 16px;
-      border-radius: 5px;
-      transition: all 0.3s ease;
-    }
-    
-    .language-buttons button:hover {
-      background-color: lightgray;
-      color: black;
-      border-color: #333;
-    }
-    
-    .language-buttons img {
-      margin-left: 5px;
-    }
-    
-    .timer {
-      display: none;
-      font-size: 40px;
-      font-weight: bold;
-      color: white;
-      margin-top: 20px;
-    }
-    
-    .stats {
-      display: flex;
-      flex-direction: column;
-      font-size: 18px;
-      margin-left: 20px;
-      text-align: left;
-    }
-    
-    .stats .stat {
-      margin-bottom: 10px;
-    }
-    
-    .stats .stat span {
-      font-weight: 700;
-    }
-    body.logo {
-      padding: 1px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 0px;
-      transition: transform 0.2s, background-color 0.2s ease-in-out;
-      border-radius: 70px;
-      margin-bottom: 7px;
-      margin-left: 80px;
-    }
-    .video-container {
-      position: absolute;
-      top: 120px; /* Adjust as needed */
-      left: 30%; /* Move it a bit more to the right */
-      width: 60%; /* Make the container responsive */
-    }
-    
-    .video-container video {
-      width: 100%; /* Make the video fill the container */
-      height: auto; /* Maintain aspect ratio */
-      object-fit: cover; /* Crop the video if necessary */
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
+  integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" 
+  referrerpolicy="no-referrer" />"
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="main.css"/>
 </head>
 <body>
+  <script src="main.js"></script>
+</body>
+
+
+
+  <!-- Full-screen logo -->
+<div id="fullScreenLogo" class="full-screen-logo">
+  <img src="/Asset/rubik_boss_3x3.png" alt="Full-screen Logo" />
+</div>
+
   <div class="video-container">
     <video autoplay loop muted playsinline>
-        <source src="/Main-menu-page/Asset/Background.mp4" type="video/mp4">
+        <source src="/Asset/Background.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 </div>
 </div>
   <div class="menu">
     <div class="logo">
-      <img src="/Main-menu-page/Asset/LOGO.png" alt="LOGO" />
+      <img src="/Asset/LOGO.png" alt="LOGO" />
     </div>
     <div class="left-buttons">
       <h1>PLAY</h1>
@@ -319,17 +38,13 @@
       <button onclick="startGame('3x3')">3x3</button>
     </div>
     <div class="bottom-buttons">
-      <button onclick="toggleStartMenu('Settings')">Settings</button>
-      <button onclick="toggleStartMenu('Settings')">About us</button>
-      <button onclick="toggleStartMenu('Tutorial')">Tutorial</button>
-      <button onclick="toggleStartMenu('Credit')">Credit</button>
-      <button onclick="toggleStartMenu('Stats')">Stat</button>
-      <button onclick="toggleStartMenu('popupcolor')">Rubrik's Color</button>
-      <button onclick="toggleStartMenu('Settings')">Sign-up</button>
-      <button onclick="toggleStartMenu('Settings')">Log-in</button>
-
-
+      <button onclick="toggleStartMenu('Settings')"><i class="fa-solid fa-gear"></i>  Setting</button>
+      <button onclick="toggleStartMenu('popupcolor')"><i class="fa-solid fa-palette"></i>  Rubik's Color</button>
+      <button onclick="toggleStartMenu('Tutorial')"><i class="fa-solid fa-book-open"></i>  Tutorial</button>
+      <button onclick="toggleStartMenu('Credit')"><i class="fa-solid fa-copyright"></i>  Credit</button>
+      <button onclick="toggleStartMenu('Aboutus')"><i class="fa-solid fa-users"></i>  About us</button>    
     </div>
+    
   </div>
   
   <div class="blank-screen" id="blankScreen">
@@ -340,7 +55,7 @@
 <div class="popup" id="Settings">
   <ul>
     <li>
-      Language
+      <i class="fa-solid fa-globe"></i> Language
       <select id="languageSelect" onchange="updateLanguage()">
         <option value="en">English</option>
         <option value="es">Spanish</option>
@@ -351,6 +66,7 @@
         <option value="ru">Russian</option>
         <option value="de">German</option>
         <option value="pt">Portuguese</option>
+        <option value="pt">Russian</option>
       </select>
     </li>
     <li>
@@ -376,10 +92,10 @@
     <li>
       Theme
       <input type="color" id="themeColor" name="themeColor" value="#ffffff" onchange="updateThemeColor()">
-    </li>        
+    </li>
     <li>
       <button onclick="resetSettings()">Reset</button>
-    </li>
+    </li>    
     <!-- Back Button -->
     <button onclick="hideScreen('Settings')">Back</button>
   </ul>
@@ -418,172 +134,67 @@
 </div>
 
 <!-- Credits Popup -->
-<div class="popup" id="Credit" style="text-align: left; padding-left: 20px;">
+<div class="popupcredit" id="Credit" style="text-align: left; padding-left: 20px;">
   <h1>Our Developers</h1>
   <p><strong>ID10: Nine</strong></p>
   <p><strong>ID15: Dew</strong></p>
   <p><strong>ID16: Faris</strong></p>
   <p><strong>ID18: Bike</strong></p>
   <p><strong>ID34: Hearth</strong></p>
+  <p>Copyright (c) 2025 Dew Pitipat</p>
+  <p>Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+</p>
   <button onclick="hideScreen('Credit')">Back</button>
 </div>
 
-<!-- Stats Popup -->
-<div class="popup" id="Stats">
-  <div class="stats">
-    <div class="stat">
-      <span>Total Solves:</span> <span id="totalSolves">0</span>
-    </div>
-    <div class="stat">
-      <span>Best Time:</span> <span id="bestTime">--:--</span>
-    </div>
-    <div class="stat">
-      <span>Average Time:</span> <span id="averageTime">--:--</span>
-    </div>
-  </div>
-  <button onclick="hideScreen('Stats')">Back</button>
-</div>
-<!-- Tutorial Popup -->
+
 <div class="popuptutorial" id="Tutorial">
   <h1>How to Play:</h1>
   
   <p><strong>Select Your Mode:</strong><br />
-    Choose the size of your Rubik's Cube (2x2 or 3x3)
+    Choose between a 2x2 or 3x3 Rubik's Cube to start.
   </p>
   
-  <p><strong>Controls & Movement:</strong><br />
-    Mouse/Touch: Click and drag a face of the cube to rotate it.<br />
-    Keyboard (if supported): Use arrow keys or designated keys to rotate specific layers.<br />
-    Hand Gesture Control (using camera): Use your hand movements detected by the webcam to interact with and rotate the Rubik’s Cube.
+  <p><strong>Controls:</strong><br />
+    Mouse/Touch: Click and drag a face to rotate.<br />
+    Keyboard: Use arrow keys or designated keys.<br />
+    Hand Gesture: Use webcam to control the cube.
   </p>
 
   <p><strong>Timing & Moves:</strong><br />
-    When you start the game, a timer will begin. Try to solve the cube as quickly as possible.<br />
-    Your moves are tracked, so aim to use the fewest moves for a high score.
+    Solve the cube as fast as possible while tracking your moves for a high score.
   </p>
 
-  <p><strong>Using Menus:</strong><br />
-    Settings: Adjust volume, language, resolution, brightness, and rotation speed by clicking the Settings button (located on the right).<br />
-    Rubik’s Cube Size: Choose between 2x2 or 3x3 cube sizes.<br />
-    Stats: View your gameplay statistics such as Total Solves, Best Time, and Average Time.<br />
-    Credits: Access information about the developers and contributors.<br />
-    Song Selection: You can also choose a background song to play while solving the puzzle.
+  <p><strong>Menu Buttons:</strong><br />
+    <strong>Settings:</strong> Adjust volume, language, resolution, brightness, and speed.<br />
+    <strong>Rubik's Color:</strong> Customize cube colors.<br />
+    <strong>Stats:</strong> View your total solves, best time, and average time.<br />
+    <strong>Credits:</strong> See developer and contributor info.<br />
+    <strong>About Us:</strong> Learn about the creators.<br />
   </p>
 
   <p><strong>Additional Features:</strong><br />
-    Customize the cube's colors through the Rubik's Color Settings in the Settings menu. To reset your settings, click the Reset button.
+    Reset your settings anytime using the Reset button.
   </p>
 
   <button onclick="hideScreen('Tutorial')">Back</button>
 </div>
 
 
-  <script>
-    let totalSolves = 0;
-    let bestTime = null;
-    let totalTime = 0;
-
-    function startGame(gameMode) {
-      const timer = document.getElementById('timerDisplay');
-      if (gameMode === '2x2' || gameMode === '3x3') {
-        timer.style.display = 'block';
-      }
-
-      let seconds = 0;
-      let startTime = Date.now();
-      const interval = setInterval(() => {
-        seconds++;
-        const minutes = Math.floor(seconds / 60);
-        const sec = seconds % 60;
-        timer.textContent = `${String(minutes).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
-      }, 1000);
-
-      document.getElementById('blankScreen').style.display = 'flex';
-
-      setTimeout(() => {
-        clearInterval(interval);
-        const endTime = Date.now();
-        const elapsedTime = (endTime - startTime) / 1000;
-        updateStats(elapsedTime);
-      }, 10000);
-    }
-    function updateThemeColor() {
-        const color = document.getElementById('themeColor').value;
-        document.body.style.backgroundColor = color;
-    }
-    
-    function updateStats(time) {
-      totalSolves++;
-      totalTime += time;
-      const averageTime = totalTime / totalSolves;
-
-      if (!bestTime || time < bestTime) {
-        bestTime = time;
-      }
-
-      document.getElementById('totalSolves').textContent = `${totalSolves}`;
-      document.getElementById('bestTime').textContent = formatTime(bestTime);
-      document.getElementById('averageTime').textContent = formatTime(averageTime);
-    }
-
-    function formatTime(seconds) {
-      const minutes = Math.floor(seconds / 60);
-      const sec = Math.round(seconds % 60);
-      return `${String(minutes).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
-    }
-
-    function exitGame() {
-      const timer = document.getElementById('timerDisplay');
-      timer.style.display = 'none';
-      document.getElementById('blankScreen').style.display = 'none';
-    }
-
-    function toggleStartMenu(id) {
-      const popup = document.getElementById(id);
-      popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function hideScreen(id) {
-      document.getElementById(id).style.display = 'none';
-    }
-    function resetSettings() {
-        document.getElementById('volumeSlider').value = 50;
-        document.getElementById('resolutionSlider').value = 50;
-        document.getElementById('brightnessSlider').value = 50;
-        document.getElementById('rotationSpeedSlider').value = 50;
-        document.getElementById('RubrikSlider').value = 50;
-        
-    function updateColor(side) {
-        const color = document.getElementById(`${side}Color`).value;
-            
-        console.log(`Updating ${side} side color to ${color}`);
-        }
-          
-        function toggleStartMenu(id) {
-            const popup = document.getElementById(id);
-            popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
-        }
-          
-        function hideScreen(id) {
-            document.getElementById(id).style.display = 'none';
-        }
-          
-    }
-    document.addEventListener('visibilitychange', function () {
-      if (document.hidden) {
-        document.body.style.opacity = '0.5';
-      } else {
-        document.body.style.opacity = '1';
-      }
-    });
-
-    window.addEventListener('blur', function () {
-      document.body.style.opacity = '0.5';
-    });
-
-    window.addEventListener('focus', function () {
-      document.body.style.opacity = '1';
-    });
-  </script>
-</body>
+<!-- About us -->
+<div class="popuptutorial" id="Aboutus"> <h1>About Us</h1>
+  <p><strong><i class="fa-brands fa-facebook"></i> Facebook:</strong> RubrikPigachu</p>
+  <p><strong><i class="fa-brands fa-instagram"></i> Instagram:</strong> RubrikDoraemon</p>
+  <p><strong><i class="fa-brands fa-tiktok"></i> TikTok:</strong> RubrikSpeed!</p>
+  <p><strong><i class="fa-solid fa-phone"></i> Tel:</strong> 0938638510</p>
+  <p><strong><i class="fa-solid fa-fax"></i></i> Fax:</strong> 038-758-427</p></p> 
+  <p><strong><i class="fa-solid fa-location-dot"></i> Address:</strong> 223 M.1 Nong-mai-dang, Muang, Chonburi 20000</p>
+  <button onclick="hideScreen('Aboutus')">Back</button>
+</div>
 </html>
