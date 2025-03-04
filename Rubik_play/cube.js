@@ -274,7 +274,7 @@ function RoundedBoxGeometry(size, radius, radiusSegments) {
                     var c = cornerOffset + r2 + u;
                     var d = c + 1;
 
-                    
+
                     if (flips[i]) {
                         indices.push(a, c, b, b, c, d);
                     } else {
@@ -298,7 +298,7 @@ function RoundedBoxGeometry(size, radius, radiusSegments) {
     }
 
     function doFaces() {
-        
+
         var a = lastVertex;
         var b = lastVertex + cornerVertNumber;
         var c = lastVertex + cornerVertNumber * 2;
@@ -354,15 +354,15 @@ function RoundedBoxGeometry(size, radius, radiusSegments) {
             for (var u = 0; u < radiusSegments; u++) {
 
                 var a = cOffset + u;
-                var b = a+1;
+                var b = a + 1;
                 var c = cRowOffset + u;
-                var d = c+1;
+                var d = c + 1;
 
                 if (needsFlip) {
                     indices.push(a, c, b, b, c, d);
 
                 } else {
-                    indices.push(a, b, c, b, d, c);     
+                    indices.push(a, b, c, b, d, c);
 
                 }
 
@@ -711,7 +711,6 @@ class Tween extends Animation {
         this.onComplete = options.onComplete || (() => { });
 
         this.delay = options.delay || false;
-        this.yoyo = options.yoyo ? false : null;
 
         this.progress = 0;
         this.value = 0;
@@ -729,7 +728,7 @@ class Tween extends Animation {
     update(delta) {
 
         const old = this.value * 1;
-        const direction = (this.yoyo === true) ? - 1 : 1;
+        const direction = 1;
 
         this.progress += (delta / this.duration) * direction;
 
@@ -742,15 +741,9 @@ class Tween extends Animation {
 
         });
 
-        if (this.yoyo !== null){
-            if (this.progress > 1 || this.progress < 0) {
-                this.value = this.progress = (this.progress > 1) ? 1 : 0;
-                this.yoyo = !this.yoyo;
-            }
-            this.onUpdate(this);
-        }
 
-        else if (this.progress <= 1) this.onUpdate(this);
+
+        if (this.progress <= 1) this.onUpdate(this);
         else {
 
             this.progress = 1;
@@ -922,8 +915,8 @@ class Controls {
 
         this.flipConfig = 0;
 
-        this.flipEasings = [Easing.Power.Out(3), Easing.Sine.Out(), Easing.Back.Out(1.5)];
-        this.flipSpeeds = [125, 200, 300];
+        this.flipEasings = [Easing.Power.Out(3), Easing.Sine.Out()];
+        this.flipSpeeds = [125, 200];
 
         this.raycaster = new THREE.Raycaster();
 
@@ -1149,7 +1142,6 @@ class Controls {
 
         const easing = this.flipEasings[config];
         const duration = this.flipSpeeds[config];
-        const bounce = (config == 2) ? this.bounceCube() : (() => { });
 
         this.rotationTween = new Tween({
             easing: easing,
@@ -1158,7 +1150,6 @@ class Controls {
 
                 let deltaAngle = tween.delta * rotation;
                 this.group.rotateOnAxis(this.flipAxis, deltaAngle);
-                bounce(tween.value, deltaAngle, rotation);
 
             },
             onComplete: () => {
@@ -1178,34 +1169,12 @@ class Controls {
 
     }
 
-    bounceCube() {
-
-        let fixDelta = true;
-
-        return (progress, delta, rotation) => {
-
-            if (progress >= 1) {
-
-                if (fixDelta) {
-
-                    delta = (progress - 1) * rotation;
-                    fixDelta = false;
-
-                }
-
-                this.game.cube.object.rotateOnAxis(this.flipAxis, delta);
-
-            }
-
-        }
-
-    }
 
     rotateCube(rotation, callback) {
 
         const config = this.flipConfig;
-        const easing = [Easing.Power.Out(4), Easing.Sine.Out(), Easing.Back.Out(2)][config];
-        const duration = [100, 150, 350][config];
+        const easing = [Easing.Power.Out(4), Easing.Sine.Out()][config];
+        const duration = [100, 150][config];
 
         this.rotationTween = new Tween({
             easing: easing,
@@ -1550,9 +1519,9 @@ class Timer extends Animation {
         //Add confetti effect???
 
         this.game.finishedtime_raw = this.deltaTime;
-        if(this.game.besttime_raw == 0 || this.game.besttime_raw > this.deltaTime){
+        if (this.game.besttime_raw == 0 || this.game.besttime_raw > this.deltaTime) {
             this.game.besttime_raw = this.deltaTime;
-            this.game.dom.texts.besttime.innerHTML = "Best time: "+ this.converted;
+            this.game.dom.texts.besttime.innerHTML = "Best time: " + this.converted;
         }
         this.game.dom.texts.finishedtime.innerHTML = "Finished time: " + this.converted;
 
@@ -1585,72 +1554,7 @@ class Timer extends Animation {
 
 }
 
-class Preferences {
-
-    constructor(game) {
-        this.game = game;
-    }
-
-    init() {
-        this.ranges = {
-
-            size: new Range('size', {
-                value: this.game.cube.size,
-                range: [2, 5],
-                step: 1,
-                onUpdate: value => {
-
-                    this.game.cube.size = value;
-
-                    this.game.preferences.ranges.scramble.list.forEach((item, i) => {
-
-                        item.innerHTML = this.game.scrambler.scrambleLength[this.game.cube.size][i];
-
-                    });
-
-                },
-                onComplete: () => this.game.storage.savePreferences(),
-            }),
-
-            flip: new Range('flip', {
-                value: this.game.controls.flipConfig,
-                range: [0, 2],
-                step: 1,
-                onUpdate: value => {
-
-                    this.game.controls.flipConfig = value;
-
-                },
-                onComplete: () => this.game.storage.savePreferences(),
-            }),
-
-            scramble: new Range('scramble', {
-                value: this.game.scrambler.dificulty,
-                range: [0, 2],
-                step: 1,
-                onUpdate: value => {
-
-                    this.game.scrambler.dificulty = value;
-
-                },
-                onComplete: () => this.game.storage.savePreferences()
-            }),
-
-            fov: new Range('fov', {
-                value: this.game.world.fov,
-                range: [2, 45],
-                onUpdate: value => {
-
-                    this.game.world.fov = value;
-                    this.game.world.resize();
-
-                },
-                onComplete: () => this.game.storage.savePreferences()
-            })
-        };
-    }
-
-}
+//this.game.controls.flipConfig, this.game.scrambler.dificulty
 
 class Storage {
 
@@ -1813,7 +1717,7 @@ class Game {
 
         this.besttime_raw = 0;
         this.finishedtime_raw = 0;
-        
+
     }
 
 
@@ -1929,7 +1833,7 @@ class Game {
 
     resetGame() {
         if (this.controls.scramble == null) {
-            if(!this.newGame){
+            if (!this.newGame) {
                 this.victory_sound.pause();
                 this.play_song.pause();
             }
