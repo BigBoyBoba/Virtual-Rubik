@@ -45,10 +45,10 @@ function exitGame() {
     const fullScreenLogo = document.getElementById('fullScreenLogo');
     setTimeout(function() {
       fullScreenLogo.style.opacity = '0';
-    }, 1000);
+    }, 2000);
   
     setTimeout(function() {
       fullScreenLogo.style.display = 'none';
-    }, 1000);
+    }, 2500);
   };
   

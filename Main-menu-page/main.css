@@ -38,10 +38,10 @@ body {
   justify-content: center;
   align-items: center;
   border: 0px;
-  border-radius: 0px;
-  border-color: rgb(67, 51, 51);
+  border-radius: px;
+  border-color: rgb(224, 40, 40);
   color: white;
-  background-color: rgb(40, 92, 224); /* Set background color */
+  background-color: rgb(224, 40, 40); /* Set background color */
 }
 
 .menu .left-buttons button {
