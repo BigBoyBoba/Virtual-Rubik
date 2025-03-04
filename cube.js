@@ -3,7 +3,9 @@ const Sounds = [
     new Audio('sounds/drag2.wav'),
     new Audio('sounds/drag3.wav'),
     new Audio('sounds/drag4.wav'),
-    new Audio('sounds/drag5.wav')
+    new Audio('sounds/drag5.wav'),
+
+
 ];
 
 const animationEngine = (() => {
@@ -1789,6 +1791,8 @@ class Game {
             }
         };
 
+        this.newGame = true;
+
         this.video = new Video(this);
         this.world = new World(this);
         this.cube = new Cube(this);
@@ -1797,20 +1801,25 @@ class Game {
         this.scrambler = new Scrambler(this);
         this.themes = new Themes(this);
         this.storage = new Storage(this);
-        this.storage.init()
+        this.storage.init();
         this.initGame();
         this.initButtons();
         this.initVisual();
 
+        this.victory_sound = new Audio("sounds/victory.mp3");
+        this.play_song = new Audio("sounds/CubeLab_song.mp3");
+        this.play_song.loop = true;
+
 
         this.besttime_raw = 0;
         this.finishedtime_raw = 0;
+        
     }
 
 
 
     initGame() {
-        this.resetGame()
+        this.resetGame();
         this.controls.enable();
         this.controls.onMove = () => this.startTimer();
         this.controls.onSolved = () => this.complete();
@@ -1893,6 +1902,10 @@ class Game {
                 scaleY: 1.25,
                 duration: 0.5,
             });
+            if (!this.newGame) {
+                this.victory_sound.pause();
+                this.play_song.pause();
+            }
             this.timer.reset();
             this.scrambler.scramble();
             this.controls.scrambleCube();
@@ -1904,15 +1917,22 @@ class Game {
         if (this.newGame) {
             this.timer.start();
             this.newGame = false;
+            this.play_song.play();
         }
     }
 
     complete() {
+        this.play_song.pause();
+        this.victory_sound.play();
         this.timer.stop();
     }
 
     resetGame() {
         if (this.controls.scramble == null) {
+            if(!this.newGame){
+                this.victory_sound.pause();
+                this.play_song.pause();
+            }
             this.cube.init();
             this.timer.reset();
             this.newGame = true;
