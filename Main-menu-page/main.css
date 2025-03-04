@@ -22,10 +22,11 @@ body {
 .menu .logo {
   justify-content: center;
   align-items: center;
+  
 }
 
 .menu .logo img {
-  width: 70%;
+  width: 25%;
   padding-left: auto;
   margin-left: 91px;
 
@@ -34,35 +35,58 @@ body {
 .menu .left-buttons {
   display: flex;
   flex-direction: column;
-  width: 100%;
   justify-content: center;
+  margin-left: 16vh;
+  margin-top: -5vh;
   align-items: center;
   border: 120px;
-  border-radius: 50px;
-  border-color: rgb(224, 40, 40);
+  border-color: rgb(112, 103, 103);
 }
 
 .menu .left-buttons button {
-    font-size: 40px; /* Increase font size */
-    font-weight: 700;
-    padding: 20px 100px; /* Increase padding for larger buttons */
-    background: none;
-    border: 3px solid transparent;
-    color: white;
-    cursor: pointer;
-    margin-bottom: 13px; /* Adjust margin if needed */
-    transition: all 0.3s ease;
-    border-radius: 10px; /* Optional: Increase border-radius for larger buttons */
-    left: 30x;
-    border-color: rgb(148, 121, 70);
-  }
+  font-size: 40px; /* Keep original properties */
+  font-weight: 700;
+  padding: 20px 100px;
+  background: none;
+  border: 3px solid rgb(198, 168, 113);
+  color: white;
+  cursor: pointer;
+  margin-bottom: 13px;
+  transition: all 0.3s ease;
+  border-radius: 10px;
+  position: relative;
+  right: 0;
+  overflow: hidden; /* Ensures animation stays within the button */
+}
 
-.menu .left-buttons button:hover {
-  background: lightgray;
-  color: rgb(0, 0, 0);
-  border-color: #333;
+/* Apply glow animation */
+.menu .left-buttons button:before {
+  content: '';
+  background: linear-gradient(45deg, #aa7272, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(5px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glowing 20s linear infinite;
+  opacity: 0;
+  transition: opacity .3s ease-in-out;
+  border-radius: 10px;
+}
+
+.menu .left-buttons button:hover:before {
   opacity: 1;
 }
+
+@keyframes glowing {
+  0% { background-position: 0 0; }
+  50% { background-position: 400% 0; }
+  100% { background-position: 0 0; }
+}
+
 
 .menu .bottom-buttons {
   position: absolute;
@@ -102,7 +126,7 @@ body {
   background: #2a2a2a;
   color: white;
   border-radius: 5px;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 10px 10px 20px rgba(132, 131, 131, 0.5);
   padding: 10px;
   text-align: center;
 }
@@ -116,7 +140,7 @@ body {
     background: #2a2a2a;
     color: white;
     border-radius: 5px;
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 10px 10px 20px rgba(132, 131, 131, 0.5);
     padding: 20px;
     text-align: left;
     overflow-y: auto;
@@ -131,7 +155,7 @@ body {
     background: #2a2a2a;
     color: white;
     border-radius: 5px;
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 10px 10px 20px rgba(132, 131, 131, 0.5);
     padding: 20px;
     text-align: left;
     overflow-y: auto;
@@ -146,7 +170,7 @@ body {
     background: #2a2a2a;
     color: white;
     border-radius: 5px;
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 10px 10px 20px rgba(132, 131, 131, 0.5);
     padding: 20px;
     text-align: left;   
 }
@@ -259,9 +283,19 @@ body.logo {
 }
 .video-container {
   position: absolute;
-  left: 200px;
-  width: 80%;
+  left: 450px;
+  width: 80vw; /* 80% of the viewport width */
+  max-width: 900px; /* Limit to 900px to avoid it growing too large */
+  margin-left: 70px;
+  height: auto; /* Adjust the height to be auto based on the content */
 }
+
+.video-container video {
+  width: 100%; 
+  height: auto; 
+  object-fit: cover; 
+}
+  
 .full-screen-logo {
   position: fixed;
   top: 0;
@@ -284,9 +318,32 @@ body.logo {
   
 }
 
-.video-container video {
-  width: 100%; 
-  height: auto; 
-  object-fit: cover; 
+.animted-button_1 .animated-button_1-top-layer .animated-button_1-2fAFG {
+  position: relative;
+  z-index: 1000;
 }
-
+.animted-button_1
+  .animated-button_1-top-layer
+  .animated-button_1-2fAFG
+  .animated-button_1-0tk6y {
+  white-space: nowrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  color: #fff;
+  border-radius: 8px;
+  background: #000;
+  transition: color 0.3s ease;
+}
+@keyframes animated-button_ano8CUX {
+  0% {
+    transform: scaleX(8) scaleY(1.5) rotate(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: scaleX(8) scaleY(1.5) rotate(1turn);
+    opacity: 1;
+  }
+}
