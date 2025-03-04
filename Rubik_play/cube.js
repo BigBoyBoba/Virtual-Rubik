@@ -1,9 +1,9 @@
 const Sounds = [
-    new Audio('/sounds/drag1.wav'),
-    new Audio('/sounds/drag2.wav'),
-    new Audio('/sounds/drag3.wav'),
-    new Audio('/sounds/drag4.wav'),
-    new Audio('/sounds/drag5.wav'),
+    new Audio('../sounds/drag1.wav'),
+    new Audio('../sounds/drag2.wav'),
+    new Audio('../sounds/drag3.wav'),
+    new Audio('../sounds/drag4.wav'),
+    new Audio('../sounds/drag5.wav'),
 
 
 ];
@@ -1806,8 +1806,8 @@ class Game {
         this.initButtons();
         this.initVisual();
 
-        this.victory_sound = new Audio("/sounds/victory.mp3");
-        this.play_song = new Audio("/sounds/CubeLab_song.mp3");
+        this.victory_sound = new Audio("../sounds/victory.mp3");
+        this.play_song = new Audio("../sounds/CubeLab_song.mp3");
         this.play_song.loop = true;
 
 
