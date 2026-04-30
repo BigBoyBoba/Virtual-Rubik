@@ -12,6 +12,6 @@ Bike (Programming [Handmovement detection])
 
 Heart (Modelling)
 
-Used Model
--https://github.com/Kazuhito00/hand-gesture-recognition-using-mediapipe
--https://github.com/bsehovac/the-cube
+Used Model \
+Hand gesture recognition model - https://github.com/Kazuhito00/hand-gesture-recognition-using-mediapipe \
+Rubik model - https://github.com/bsehovac/the-cube
