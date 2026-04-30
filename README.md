@@ -2,15 +2,15 @@ Programming4 Small Project
 
 Member
 
-Nine (Sound Design, UI Design)
+Jirapat Srimak (Sound Design, UI Design)
 
-Dew (Programming [Mainpage Frontend] )
+Pitipat Wattananantapan (Programming [Mainpage Frontend] )
 
-Faris (Programming [Rubik Frontend])
+Faris Jari (Programming [Rubik Frontend])
 
-Bike (Programming [Handmovement detection])
+Worapol Lueknaree (Programming [Handmovement detection])
 
-Heart (Modelling)
+Thananrat Chonsomchit (Modelling)
 
 Used Model \
 Hand gesture recognition model - https://github.com/Kazuhito00/hand-gesture-recognition-using-mediapipe \
